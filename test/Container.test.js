@@ -56,18 +56,42 @@ describe('Dependency Container', function () {
 			});
 		});
 
-		it('uses a last parameter named "callback" as actual callback to obtain the injected dependency', function (done) {
+
+		// check sync and async
+		describe('uses a last parameter named "callback" as actual callback to obtain the injected dependency', function () {
+
+			it('knows how to handle synchronous callbacks', function (done) {
+				var container = new Container();
+
+				container.inject(function (dummyCallbackSync) {
+					assert.strictEqual(dummyCallbackSync, 3);
+					done();
+				});
+			});
+
+			it('knows how to handle asynchronous callbacks', function (done) {
+				var container = new Container();
+
+				container.inject(function (dummyCallbackAsync) {
+					assert.strictEqual(dummyCallbackAsync, 4);
+					done();
+				});
+			});
+
+		});
+
+		it('injects with no dependencies and no return values', function (done) {
 
 			var container = new Container();
 
-			container.inject(function (dummyCallback) {
-				assert.strictEqual(dummyCallback, 3);
+			container.inject(function (dummyNoReturn) {
+
 				done();
 			});
 		});
 	});
 
-	describe.skip('Container.prototype._getFunctionParameters', function () {
+	describe('Container.prototype._getFunctionParameters', function () {
 		it('extracts the parameters from a function\'s signature', function () {
 			function f(a, b, c) {
 			}
@@ -100,12 +124,12 @@ describe('Dependency Container', function () {
 			}
 		});
 
-		it('returns nothing if function has no parameters', function () {
+		it('returns an empty array if function has no parameters', function () {
 			function f() {}
 
 			var actual = Container.prototype._getFunctionParameters(f);
 
-			assert.strictEqual(actual, undefined);
+			assert.deepEqual(actual, []);
 		});
 	});
 });
