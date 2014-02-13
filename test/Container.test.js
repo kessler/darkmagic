@@ -2,11 +2,19 @@ var Container = require('../lib/Container.js');
 var assert = require('assert');
 var util = require('util');
 
+
+
 describe('Dependency Container', function () {
+	var container;
+
+	before(function () {
+
+		container = new Container();
+		container.addSearchPath('./lib');
+	})
+
 	describe('inject', function () {
 		it('injects dependencies from core modules', function (done) {
-
-			var container = new Container();
 
 			container.inject(function (http) {
 				assert.strictEqual(http, require('http'));
@@ -16,8 +24,6 @@ describe('Dependency Container', function () {
 
 		it('injects dependencies from node modules', function (done) {
 
-			var container = new Container();
-
 			container.inject(function (eyes) {
 				assert.strictEqual(eyes, require('eyes'));
 				done();
@@ -26,8 +32,6 @@ describe('Dependency Container', function () {
 
 		it('injects dependencies from search paths', function (done) {
 
-			var container = new Container();
-
 			container.inject(function (dummy) {
 				assert.strictEqual(dummy, 2);
 				done();
@@ -35,8 +39,6 @@ describe('Dependency Container', function () {
 		});
 
 		it('injects dependencies from all over the place', function (done) {
-
-			var container = new Container();
 
 			container.inject(function (http, eyes, dummy) {
 				assert.strictEqual(dummy, 2);
@@ -47,8 +49,6 @@ describe('Dependency Container', function () {
 		});
 
 		it('inject recursively', function (done) {
-
-			var container = new Container();
 
 			container.inject(function (dummy2) {
 				assert.strictEqual(dummy2, 1);
@@ -61,7 +61,6 @@ describe('Dependency Container', function () {
 		describe('uses a last parameter named "callback" as actual callback to obtain the injected dependency', function () {
 
 			it('knows how to handle synchronous callbacks', function (done) {
-				var container = new Container();
 
 				container.inject(function (dummyCallbackSync) {
 					assert.strictEqual(dummyCallbackSync, 3);
@@ -70,7 +69,6 @@ describe('Dependency Container', function () {
 			});
 
 			it('knows how to handle asynchronous callbacks', function (done) {
-				var container = new Container();
 
 				container.inject(function (dummyCallbackAsync) {
 					assert.strictEqual(dummyCallbackAsync, 4);
@@ -82,7 +80,6 @@ describe('Dependency Container', function () {
 
 		it('injects with no dependencies and no return values', function (done) {
 
-			var container = new Container();
 
 			container.inject(function (dummyNoReturn) {
 

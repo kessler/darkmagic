@@ -1,4 +1,13 @@
-flame-di
-========
+# flame framework - dependency injection module
 
-dependency injection part of flame server framework
+This is a highly opinionated dependency injection implementation.
+
+## example
+```
+
+```
+
+
+
+
+

@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yaniv Kessler",
+  "license": "MIT",
+  "dependencies": {
+    "rc": "~0.3.3",
+    "db-stuff": "~1.0.11"
+  }
+}
