@@ -1,6 +1,6 @@
-# flame framework - dependency injection module
+# flame DI
 
-This is a highly opinionated dependency injection implementation.
+Currently an experimental highly opinionated dependency injection framwork.
 
 ## example
 ###lib/database.js:
@@ -44,12 +44,10 @@ database(function(err, connection) {
 ```
 however flame di eliminates the need for these declarations by infering the dependencies from the arguments of a function.
 
-TBD.
+TODO:
 
-
-
-
-
-
-
+- complete readme
+- maybe publish to npm at some point
+- support node modules with dashes (maybe via underscore)
+- static analysis of dependencies
 
