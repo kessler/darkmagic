@@ -1,7 +1,9 @@
+process.env.DEBUG = 'Injector,dummy*,DependencyMetadata';
+
 var Injector = require('../lib/Injector.js');
 var assert = require('assert');
 var util = require('util');
-
+var Module = require('module');
 
 
 describe('Dependency Injector', function () {
@@ -39,7 +41,6 @@ describe('Dependency Injector', function () {
 
 		it('dependencies from search paths', function (done) {
 			injector.inject(function searchPaths(dummy, dummy2) {
-
 				assert.strictEqual(dummy, 2);
 				assert.strictEqual(dummy2, 1);
 				done();
@@ -66,18 +67,23 @@ describe('Dependency Injector', function () {
 			});
 		});
 
-		it('with no dependencies and no return values', function (done) {
-
+		it('with no dependencies and no return values (dependency invoke only)', function (done) {
 			injector.inject(function noDeps(dummyNoReturn) {
 				done();
 			});
 		});
 
-
 		// check sync and async
 		describe('a dependency via a callback if dependency is a factory and has a last parameter called "callback"', function () {
 
 			it('synchronously with single param', function (done) {
+				injector.inject(function sync(dummyCallbackSync) {
+					assert.strictEqual(dummyCallbackSync, 3);
+					done();
+				});
+			});
+
+			it('1synchronously with single param', function (done) {
 				injector.inject(function sync(dummyCallbackSync) {
 					assert.strictEqual(dummyCallbackSync, 3);
 					done();
@@ -100,11 +106,44 @@ describe('Dependency Injector', function () {
 			});
 
 			it('asynchronously with multiple params', function (done) {
-
 				injector.inject(function async(dummyCallbackAsyncMulti) {
 					assert.strictEqual(dummyCallbackAsyncMulti, 10);
 					done();
 				});
+			});
+		});
+	});
+
+	describe('cache', function () {
+		it('factory invocation result just like normal require', function (done) {
+			// dummy cache is a module that returns a function
+			// that function gives the test access to module internal
+			// calls counter.
+			// each invocation of require('dummyCache') will increament
+			// the calls counter, thus if the result cache would have
+			// broken, dummyCache() would return something higher than 1
+			injector.inject(function noDeps(dummyCache) {
+				var calls = dummyCache();
+				assert.strictEqual(calls, 1);
+
+				injector.inject(function noDeps1(dummyCache) {
+					var calls = dummyCache();
+					assert.strictEqual(calls, 1);
+
+					injector.inject(function noDeps2(dummyCache) {
+						var calls = dummyCache();
+						assert.strictEqual(calls, 1);
+						done();
+					});
+				});
+			});
+		});
+
+		it('makes subsequent require() calls return the result of the factory, rather than the exported factory function', function (done) {
+			injector.inject(function noDeps(dummyCache) {
+				var actual = require('./lib/dummyCache');
+				assert.strictEqual(actual, dummyCache);
+				done();
 			});
 		});
 	});

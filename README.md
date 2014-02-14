@@ -1,4 +1,4 @@
-# flame DI
+# flame DI  [![Build Status](https://secure.travis-ci.org/kessler/flame-di.png?branch=master)](http://travis-ci.org/kessler/flame-di)
 
 Currently an experimental highly opinionated dependency injection framwork.
 
