@@ -1,13 +1,11 @@
-module.exports.Container = require('./lib/Container.js');
+var Injector = module.exports.Injector = require('./lib/Injector.js');
 module.exports.inject = function(file) {
-	var container = new Container();
-
-	var main;
+	var injector = new Injector();
 
 	if (typeof file === 'string')
-		main = require(file);
+		file = require(file);
 	else if (typeof file !== 'function')
 		throw new Error('invalid parameter, must provide a filename or a function');
 
-	container.inject(main);
+	injector.inject(file);
 };
