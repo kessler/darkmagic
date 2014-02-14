@@ -1,10 +1,10 @@
 process.env.DEBUG = 'Injector,dummy*,DependencyMetadata';
 
+var path = require('path');
 var Injector = require('../lib/Injector.js');
 var assert = require('assert');
 var util = require('util');
 var Module = require('module');
-
 
 describe('Dependency Injector', function () {
 	var injector;
@@ -12,7 +12,7 @@ describe('Dependency Injector', function () {
 	before(function () {
 
 		injector = new Injector();
-		injector.addSearchPath('./lib');
+		injector.addSearchPath(path.join(__dirname, 'lib'));
 	})
 
 	it('invokes', function (done) {
