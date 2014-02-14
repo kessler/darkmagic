@@ -13,8 +13,14 @@ describe('Dependency Injector', function () {
 		injector.addSearchPath('./lib');
 	})
 
-	describe('inject', function () {
-		it('injects dependencies from core modules', function (done) {
+	it('invokes', function (done) {
+		injector.inject(function invoking() {
+			done();
+		});
+	});
+
+	describe('injects', function () {
+		it('dependencies from core modules', function (done) {
 			injector.inject(function coreModules(http, net) {
 				assert.strictEqual(http, require('http'));
 				assert.strictEqual(net, require('net'));
@@ -22,7 +28,7 @@ describe('Dependency Injector', function () {
 			});
 		});
 
-		it('injects dependencies from node modules', function (done) {
+		it('dependencies from node modules', function (done) {
 
 			injector.inject(function nodeModules(eyes, esprima) {
 				assert.strictEqual(eyes, require('eyes'));
@@ -31,7 +37,7 @@ describe('Dependency Injector', function () {
 			});
 		});
 
-		it('injects dependencies from search paths', function (done) {
+		it('dependencies from search paths', function (done) {
 			injector.inject(function searchPaths(dummy, dummy2) {
 
 				assert.strictEqual(dummy, 2);
@@ -40,17 +46,18 @@ describe('Dependency Injector', function () {
 			});
 		});
 
-		it('injects dependencies from all over the place', function (done) {
+		it('dependencies from all over the place', function (done) {
 
-			injector.inject(function (http, eyes, dummy) {
+			injector.inject(function (http, eyes, dummy, dummyCallbackAsync) {
 				assert.strictEqual(dummy, 2);
 				assert.strictEqual(http, require('http'));
 				assert.strictEqual(eyes, require('eyes'));
+				assert.strictEqual(dummyCallbackAsync, 4);
 				done();
 			});
 		});
 
-		it('inject recursively', function (done) {
+		it('recursively', function (done) {
 
 			injector.inject(function (dummy2, dummy) {
 				assert.strictEqual(dummy2, 1);
@@ -59,16 +66,9 @@ describe('Dependency Injector', function () {
 			});
 		});
 
-		it('injects with no dependencies and no return values', function (done) {
+		it('with no dependencies and no return values', function (done) {
 
 			injector.inject(function noDeps(dummyNoReturn) {
-				done();
-			});
-		});
-
-		it('invoking', function (done) {
-
-			injector.inject(function invoking() {
 				done();
 			});
 		});
