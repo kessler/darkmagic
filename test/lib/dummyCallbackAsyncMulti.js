@@ -1,7 +1,7 @@
 var debug = require('debug')('dummyCallbackAsync');
-module.exports = function(callback) {
+module.exports = function(dummy, callback) {
 	debug('here');
 	process.nextTick(function () {
-		callback(null, 4);
+		callback(null, 10);
 	});
 };

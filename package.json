@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "esprima": "~1.0.4",
-    "lodash": "~2.4.1",
     "debug": "~0.7.4",
     "read-package-json": "~1.1.7"
   },
