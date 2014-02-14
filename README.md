@@ -44,10 +44,65 @@ database(function(err, connection) {
 ```
 however flame di eliminates the need for these declarations by infering the dependencies from the arguments of a function.
 
+## How to
+
+### simple dependency
+####simple.js:
+```javascript
+module.exports = function (http, fs) {
+	http.createServer(function(request, response) {
+		fs.createReadStream('moo').pipe(response);
+	}).listen(8080);
+}
+```
+####index.js
+```javascript
+require('flame-di').inject(function(http, simple) {
+	http.get('http://localhost:8080', function(err, response) {
+		//responds with contents of file moo
+	});
+});
+```
+
+### returning a value
+#### config.js
+```javascript
+module.exports = function (rc) {
+	return rc('myapp', { port: 8080 });
+}
+```
+#### index.js
+```javascript
+require('flame-di').inject(function(http, config) {
+	http.createServer(...).listen(config.port);
+});
+```
+
+### callbacks
+#### mooFile.js
+```javascript
+module.exports = function (fs, callback) {
+	fs.readFile('moo', callback);
+}
+```
+#### fooFile.js
+```javascript
+module.exports = function (fs, callback) {
+	fs.readFile('foo', callback);
+}
+```
+#### index.js
+```javascript
+require('flame-di').inject(function(mooFile, fooFile) {
+	// this function will be call with the contents of moo and foo files
+});
+```
+
 TODO:
 
 - complete readme
 - maybe publish to npm at some point
 - support node modules with dashes (maybe via underscore)
 - static analysis of dependencies
+- implement something that will replace flame di with require()s and initializations
 
