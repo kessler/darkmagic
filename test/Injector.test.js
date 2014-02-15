@@ -83,13 +83,6 @@ describe('Dependency Injector', function () {
 				})
 			})
 
-			it('1synchronously with single param', function (done) {
-				injector.inject(function sync(dummyCallbackSync) {
-					assert.strictEqual(dummyCallbackSync, 3)
-					done()
-				})
-			})
-
 			it('synchronously with multiple params', function (done) {
 				injector.inject(function sync(dummyCallbackSyncMulti) {
 					assert.strictEqual(dummyCallbackSyncMulti, 9)
@@ -111,11 +104,21 @@ describe('Dependency Injector', function () {
 					done()
 				})
 			})
+
+			it('resolves a hierarchy of callbacks', function () {
+				injector.inject(function hierarchy(dummyHierarchy) {
+					assert.strictEqual(dummyHierarchy.dummyCallbackAsyncMulti, require('./lib/dummyCallbackAsyncMulti'))
+					assert.strictEqual(dummyHierarchy.dummyCallbackAsyncMulti, 10)
+
+					assert.strictEqual(dummyHierarchy.dummyCallbackSyncMulti, require('./lib/dummyCallbackSyncMulti'))
+					assert.strictEqual(dummyHierarchy.dummyCallbackSyncMulti, 9)
+				})
+			})
 		})
 	})
 
-	describe('cache', function () {
-		it('factory invocation result just like normal require', function (done) {
+	describe('use the module system', function () {
+		it('factory invocation are only executed once, subsequent injections do not invoke the factory again', function (done) {
 			// dummy cache is a module that returns a function
 			// that function gives the test access to module internal
 			// calls counter.
@@ -144,6 +147,20 @@ describe('Dependency Injector', function () {
 				var actual = require('./lib/dummyCache')
 				assert.strictEqual(actual, dummyCache)
 				done()
+			})
+		})
+	})
+
+	describe('provides api to manually add and remove dependencies', function () {
+		it('using a remove method', function () {
+			injector.inject(function remove(dummy) {
+				var metadata = injector.getMetadata('dummy')
+				assert.ok(metadata)
+
+				injector.remove('dummy')
+
+				assert.strictEqual(require.cache[metadata.requireId], undefined)
+				assert.strictEqual(injector.getMetadata('dummy'), undefined)
 			})
 		})
 	})
