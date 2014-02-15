@@ -2,10 +2,10 @@
 
 An experimental highly opinionated dependency injection framwork that:
 
-	- relies on code conventions
-	- resolve dependencies recursively
-	- promote cleaner code
-	- promote testability
+* relies on code conventions
+* resolve dependencies recursively
+* promote cleaner code
+* promote testability
 
 This di relies heavily the module system, it does not cache the dependencies you create.
 
