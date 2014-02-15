@@ -69,16 +69,26 @@ module.exports = function (fs, callback) {
 	fs.readFile('moo', callback);
 }
 ```
-#### fooFile.js
+#### server.js
 ```javascript
-module.exports = function (fs, callback) {
-	fs.readFile('foo', callback);
+module.exports = function (http, mooFile, callback) {
+	var server = http.createServer(function(request, response) {
+		response.write(mooFile);
+	});
+
+	server.on('listening', function() {
+		callback(null, server);
+	});
+
+	server.listen(8080);
 }
 ```
 #### index.js
 ```javascript
-require('flame-di').inject(function(mooFile, fooFile) {
-	// this function will be call with the contents of moo and foo files
+require('flame-di').inject(function(http, server) {
+	http.get('http://localhost:8080', function(err, response) {
+		// response content should be equal to our moo file
+	});
 });
 ```
 --------------------------------
