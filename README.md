@@ -1,6 +1,13 @@
 # flame DI  [![Build Status](https://secure.travis-ci.org/kessler/flame-di.png?branch=master)](http://travis-ci.org/kessler/flame-di)
 
-An experimental highly opinionated dependency injection framwork.
+An experimental highly opinionated dependency injection framwork that:
+
+	- relies on code conventions
+	- resolve dependencies recursively
+	- promote cleaner code
+	- promote testability
+
+This di relies heavily the module system, it does not cache the dependencies you create.
 
 ## example
 ###lib/database.js:
@@ -42,7 +49,7 @@ database(function(err, connection) {
 	}).listen(config.httpPort)
 })
 ```
-however flame di eliminates the need for these declarations by infering the dependencies from the arguments of a function.
+Flame DI eliminates the need for these declarations by infering the dependencies from the parameters of a function (it does that using [esprima](http://esprima.org/))
 
 ## How to
 
@@ -109,8 +116,7 @@ require('flame-di').inject(function(http, config) {
 
 TODO:
 
-- complete readme
-- maybe publish to npm at some point
+- publish to npm at some point if this takes off
 - support node modules with dashes (maybe via underscore)
 - static analysis of dependencies
 - implement something that will replace flame di with require()s and initializations
