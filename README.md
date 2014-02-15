@@ -58,36 +58,36 @@ Flame DI eliminates the need for these declarations by infering the dependencies
 ```javascript
 module.exports = function (http, fs) {
 	http.createServer(function(request, response) {
-		fs.createReadStream('moo').pipe(response);
-	}).listen(8080);
+		fs.createReadStream('moo').pipe(response)
+	}).listen(8080)
 }
 ```
 ####index.js
 ```javascript
 require('flame-di').inject(function(simple) {
 	// simple server is started but we dont know when its ready
-});
+})
 ```
 --------------------------------
 ### callbacks
 #### mooFile.js
 ```javascript
 module.exports = function (fs, callback) {
-	fs.readFile('moo', callback);
+	fs.readFile('moo', callback)
 }
 ```
 #### server.js
 ```javascript
 module.exports = function (http, mooFile, callback) {
 	var server = http.createServer(function(request, response) {
-		response.write(mooFile);
-	});
+		response.write(mooFile)
+	})
 
 	server.on('listening', function() {
-		callback(null, server);
-	});
+		callback(null, server)
+	})
 
-	server.listen(8080);
+	server.listen(8080)
 }
 ```
 #### index.js
@@ -95,22 +95,22 @@ module.exports = function (http, mooFile, callback) {
 require('flame-di').inject(function(http, server) {
 	http.get('http://localhost:8080', function(err, response) {
 		// response content should be equal to our moo file
-	});
-});
+	})
+})
 ```
 --------------------------------
 ### returning a value
 #### config.js
 ```javascript
 module.exports = function (rc) {
-	return rc('myapp', { port: 8080 });
+	return rc('myapp', { port: 8080 })
 }
 ```
 #### index.js
 ```javascript
 require('flame-di').inject(function(http, config) {
-	http.createServer(...).listen(config.port);
-});
+	http.createServer(...).listen(config.port)
+})
 ```
 
 
