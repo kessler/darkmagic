@@ -57,27 +57,11 @@ module.exports = function (http, fs) {
 ```
 ####index.js
 ```javascript
-require('flame-di').inject(function(http, simple) {
-	http.get('http://localhost:8080', function(err, response) {
-		//responds with contents of file moo
-	});
+require('flame-di').inject(function(simple) {
+	// simple server is started but we dont know when its ready
 });
 ```
-
-### returning a value
-#### config.js
-```javascript
-module.exports = function (rc) {
-	return rc('myapp', { port: 8080 });
-}
-```
-#### index.js
-```javascript
-require('flame-di').inject(function(http, config) {
-	http.createServer(...).listen(config.port);
-});
-```
-
+--------------------------------
 ### callbacks
 #### mooFile.js
 ```javascript
@@ -97,6 +81,21 @@ require('flame-di').inject(function(mooFile, fooFile) {
 	// this function will be call with the contents of moo and foo files
 });
 ```
+--------------------------------
+### returning a value
+#### config.js
+```javascript
+module.exports = function (rc) {
+	return rc('myapp', { port: 8080 });
+}
+```
+#### index.js
+```javascript
+require('flame-di').inject(function(http, config) {
+	http.createServer(...).listen(config.port);
+});
+```
+
 
 TODO:
 
