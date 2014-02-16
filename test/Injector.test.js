@@ -1,10 +1,11 @@
-process.env.DEBUG = 'Injector,dummy*,DependencyMetadata'
+process.env.DEBUG = 'Injector,dummy*,Dependency'
 
 var path = require('path')
 var Injector = require('../lib/Injector.js')
 var assert = require('assert')
 var util = require('util')
 var Module = require('module')
+var Dependency = require('../lib/Dependency.js')
 
 describe('Dependency Injector', function () {
 	var injector
@@ -154,13 +155,13 @@ describe('Dependency Injector', function () {
 	describe('provides api to manually add and remove dependencies', function () {
 		it('using a remove method', function () {
 			injector.inject(function remove(dummy) {
-				var metadata = injector.getMetadata('dummy')
-				assert.ok(metadata)
+				var dependency = injector.getDependency('dummy')
+				assert.ok(dependency instanceof Dependency)
 
 				injector.remove('dummy')
 
-				assert.strictEqual(require.cache[metadata.requireId], undefined)
-				assert.strictEqual(injector.getMetadata('dummy'), undefined)
+				assert.strictEqual(require.cache[dependency.requireId], undefined)
+				assert.strictEqual(injector.getDependency('dummy'), undefined)
 			})
 		})
 	})
