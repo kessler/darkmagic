@@ -1,4 +1,5 @@
 var Injector = module.exports.Injector = require('./lib/Injector.js');
+
 module.exports.inject = function(file) {
 	var injector = new Injector();
 
@@ -8,4 +9,6 @@ module.exports.inject = function(file) {
 		throw new Error('invalid parameter, must provide a filename or a function');
 
 	injector.inject(file);
+
+	return injector;
 };
