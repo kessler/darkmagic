@@ -23,6 +23,12 @@ describe('Dependency Injector', function () {
 	})
 
 	describe('injects', function () {
+		it('itself', function () {
+			injector.inject(function($injector) {
+				assert.strictEqual($injector, injector)
+			})
+		})
+
 		it('dependencies from core modules', function (done) {
 			injector.inject(function coreModules(http, net) {
 				assert.strictEqual(http, require('http'))
