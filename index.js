@@ -1,22 +1,23 @@
 var Dependency = module.exports.Dependency = require('./lib/Dependency.js')
 var Injector = module.exports.Injector = require('./lib/Injector.js');
+
 module.exports.inject = inject
-module.exports.injector = injector
+module.exports.injector = newInjector
 
 function inject(file, overrides) {
-	var injector = injector(overrides)
+	var injector = newInjector(overrides)
 
 	if (typeof file === 'string')
-		file = require(file);
+		file = require(file)
 	else if (typeof file !== 'function')
-		throw new Error('invalid parameter, must provide a filename or a function');
+		throw new Error('invalid parameter, must provide a filename or a function')
 
-	injector.inject(file);
+	injector.inject(file)
 
 	return injector;
-};
+}
 
-function injector(overrides) {
+function newInjector(overrides) {
 	var injector = new Injector()
 
 	for (var name in overrides) {

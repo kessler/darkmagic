@@ -266,4 +266,12 @@ describe('Dependency Injector', function () {
 			assert.deepEqual(actual, [])
 		})
 	})
+
+	it('index', function (done) {
+		var index = require('../index')
+		index.inject(function (fs) {
+			assert.strictEqual(fs, require('fs'))
+			done()
+		})
+	})
 })
