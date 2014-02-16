@@ -7,8 +7,7 @@ An experimental highly opinionated dependency injection framwork that:
 * promote cleaner code
 * promote testability
 
-This di relies heavily the module system, it does not cache the dependencies you create.
-
+This di relies heavily on the module system, it does not cache the dependencies you create.
 ## example
 ###lib/database.js:
 ```javascript
@@ -116,9 +115,9 @@ require('flame-di').inject(function(http, config) {
 
 TODO:
 
-- publish to npm at some point if this takes off
+- circular dependency detection
 - support node modules with dashes: when trying to initially camel cased dep parameters, prepend every upper case with a dash and transform to lower, since node modules usually dont use mixed case
 - provider class factories - parameters that start with an Upper case char will be resolved be looking for a class factory
 - static analysis of dependencies
 - implement something that will replace flame di with require()s and initializations (code generator)
-
+- publish to npm at some point if this takes off
