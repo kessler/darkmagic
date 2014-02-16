@@ -1,6 +1,6 @@
 {
   "name": "darkmagic",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "flame framework dependency injection",
   "main": "index.js",
   "scripts": {
