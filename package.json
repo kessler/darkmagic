@@ -1,5 +1,5 @@
 {
-  "name": "flame-di",
+  "name": "darkmagic",
   "version": "0.0.9",
   "description": "flame framework dependency injection",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kessler/flame-di"
+    "url": "https://github.com/kessler/darkmagic"
   },
   "keywords": [
     "dependency injection",
@@ -21,7 +21,7 @@
   "author": "Yaniv Kessler",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kessler/flame-di/issues"
+    "url": "https://github.com/kessler/darkmagic/issues"
   },
   "dependencies": {
     "esprima": "~1.0.4",

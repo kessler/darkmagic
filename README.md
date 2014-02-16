@@ -1,4 +1,4 @@
-# flame DI [![Build Status](https://secure.travis-ci.org/kessler/flame-di.png?branch=master)](http://travis-ci.org/kessler/flame-di)
+# flame DI [![Build Status](https://secure.travis-ci.org/kessler/darkmagic.png?branch=master)](http://travis-ci.org/kessler/darkmagic)
 
 An experimental highly opinionated dependency injection framwork that:
 
@@ -27,7 +27,7 @@ module.exports = function(rc) {
 ```
 ###index.js:
 ```javascript
-require('flame-di').inject(function(http, database, config) {
+require('darkmagic').inject(function(http, database, config) {
 	// do application stuff
 	http.createServer(function(request, response) {
 		connection.query('select * from moo', function(err, results) {
@@ -66,7 +66,7 @@ module.exports = function (http, fs) {
 ```
 ####index.js
 ```javascript
-require('flame-di').inject(function(simple) {
+require('darkmagic').inject(function(simple) {
 	// simple server is started but we dont know when its ready
 })
 ```
@@ -94,7 +94,7 @@ module.exports = function (http, mooFile, callback) {
 ```
 #### index.js
 ```javascript
-require('flame-di').inject(function(http, server) {
+require('darkmagic').inject(function(http, server) {
 	http.get('http://localhost:8080', function(err, response) {
 		// response content should be equal to our moo file
 	})
@@ -110,7 +110,7 @@ module.exports = function (rc) {
 ```
 #### index.js
 ```javascript
-require('flame-di').inject(function(http, config) {
+require('darkmagic').inject(function(http, config) {
 	http.createServer(...).listen(config.port)
 })
 ```
@@ -124,7 +124,7 @@ var overrides = {
 	'fooBar': 'MyCrazyNodeModule__name',
 	'barFoo': '/home/moo/lib/1.js'
 }
-require('flame-di').inject(function(fooBar, barFoo) {
+require('darkmagic').inject(function(fooBar, barFoo) {
 
 }, overrides)
 ```
@@ -135,8 +135,8 @@ this will not work for local files though
 
 #### index.js
 ```javascript
-require('flame-di').inject(function(flameDi) {
-	// same as require('flame-di')
+require('darkmagic').inject(function(flameDi) {
+	// same as require('darkmagic')
 })
 ```
 
@@ -146,13 +146,13 @@ This framework uses a lot of "dark magic" tricks that many will view as dangerou
 ####This module:
 - parses function signature and uses the parameters, literally to load modules, first attempting to require them as they are and then by attaching them to various predefined search paths in your local file system
 
-- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with the result of the invocation for that module, see this [test](https://github.com/kessler/flame-di/blob/master/test/Injector.test.js#L127)
+- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with the result of the invocation for that module, see this [test](https://github.com/kessler/darkmagic/blob/master/test/Injector.test.js#L127)
 
 - dashify camelCase (camel-case) paramters when trying to find non local node modules
 
 - infer that an exported function is async if the last paramter is called "callback"
 
-[back up](#flame-di-)
+[back up](#darkmagic-)
 
 TODO:
 
