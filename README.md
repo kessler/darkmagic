@@ -9,7 +9,7 @@ An experimental highly opinionated dependency injection framwork that:
 
 This di relies heavily on the module system, it does not cache the dependencies you create.
 
-Please read the [dark magic section](#dark-magic-full-disclosure) before proceeding.
+Please read the [dark magic section](#dark-magic---full-disclosure) before proceeding.
 
 ## example
 ###lib/database.js:
@@ -112,6 +112,16 @@ module.exports = function (rc) {
 ```javascript
 require('flame-di').inject(function(http, config) {
 	http.createServer(...).listen(config.port)
+})
+```
+--------------------------------
+### getting a dash seperated npm module
+this will not work for local files though
+
+#### index.js
+```javascript
+require('flame-di').inject(function(flameDi) {
+	// same as require('flame-di')
 })
 ```
 
