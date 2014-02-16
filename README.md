@@ -115,6 +115,21 @@ require('flame-di').inject(function(http, config) {
 })
 ```
 --------------------------------
+### explicit dependencies
+this will not work for local files though
+
+#### index.js
+```javascript
+var overrides = {
+	'fooBar': 'MyCrazyNodeModule__name',
+	'barFoo': '/home/moo/lib/1.js'
+}
+require('flame-di').inject(function(fooBar, barFoo) {
+
+}, overrides)
+```
+
+--------------------------------
 ### getting a dash seperated npm module
 this will not work for local files though
 
@@ -137,6 +152,7 @@ This framework uses a lot of "dark magic" tricks that many will view as dangerou
 
 - infer that an exported function is async if the last paramter is called "callback"
 
+[back up](flame-DI)
 
 TODO:
 

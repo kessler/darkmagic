@@ -1,7 +1,10 @@
+var Dependency = module.exports.Dependency = require('./lib/Dependency.js')
 var Injector = module.exports.Injector = require('./lib/Injector.js');
+module.exports.inject = inject
+module.exports.injector = injector
 
-module.exports.inject = function(file) {
-	var injector = new Injector();
+function inject(file, overrides) {
+	var injector = injector(overrides)
 
 	if (typeof file === 'string')
 		file = require(file);
@@ -12,3 +15,15 @@ module.exports.inject = function(file) {
 
 	return injector;
 };
+
+function injector(overrides) {
+	var injector = new Injector()
+
+	for (var name in overrides) {
+		var dep = new Dependency(name)
+		dep.requireId = overrides[name]
+		injector.add(dep)
+	}
+
+	return injector
+}
