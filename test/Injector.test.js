@@ -153,7 +153,7 @@ describe('Dependency Injector', function () {
 	})
 
 	describe('provides api to manually add and remove dependencies', function () {
-		it('using a remove method', function () {
+		it('remove()', function () {
 			injector.inject(function remove(dummy) {
 				var dependency = injector.getDependency('dummy')
 				assert.ok(dependency instanceof Dependency)
@@ -162,6 +162,17 @@ describe('Dependency Injector', function () {
 
 				assert.strictEqual(require.cache[dependency.requireId], undefined)
 				assert.strictEqual(injector.getDependency('dummy'), undefined)
+			})
+		})
+
+		it('add()', function () {
+			var dependency = new Dependency('foo')
+			dependency.requireId = 'http'
+
+			injector.add(dependency)
+
+			injector.inject(function (foo) {
+				assert.strictEqual(foo, require('http'))
 			})
 		})
 	})
