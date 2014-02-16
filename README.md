@@ -9,6 +9,8 @@ An experimental highly opinionated dependency injection framwork that:
 
 This di relies heavily on the module system, it does not cache the dependencies you create.
 
+Please read the [dark magic section](#dark-magic-full-disclosure) before proceeding.
+
 ## example
 ###lib/database.js:
 ```javascript
@@ -112,6 +114,18 @@ require('flame-di').inject(function(http, config) {
 	http.createServer(...).listen(config.port)
 })
 ```
+
+## Dark magic - Full disclosure
+This framework uses a lot of "dark magic" tricks that many will view as dangerous. These people are probably right and you should listen to them!
+
+####This module:
+- parses function signature and uses the parameters, literally to load modules, first attempting to require them as they are and then by attaching them to various predefined search paths in your local file system
+
+- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with it for that module
+
+- dashify camelCase (camel-case) paramters when trying to find non local node modules
+
+- infer that an exported function is async if the last paramter is called "callback"
 
 
 TODO:
