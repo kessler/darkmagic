@@ -1,8 +1,8 @@
-var debug = require('debug')('dummy2');
+var debug = require('debug')('dummy2')
 
 // used in tests, but sadly must reside here
 module.exports = function dummy2(dummy) {
-	debug('here');
+	debug('here')
 
-	return 1;
+	return 1
 };

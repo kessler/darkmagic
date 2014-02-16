@@ -183,6 +183,47 @@ describe('Dependency Injector', function () {
 		})
 	})
 
+	describe('detects circular dependencies', function () {
+
+		function verifyError(done) {
+			return function(err) {
+				// this sucks but so does trying to inherit from Error
+				if (err instanceof Error && err.message && err.message.indexOf('circular') > -1) {
+					done()
+					return true
+				} else {
+					done(err)
+					return false
+				}
+
+			}
+		}
+
+		it('- direct', function (done) {
+			assert.throws(function () {
+				injector.inject(function (dummyCircular1) {
+					done('should not have been called')
+				})
+			}, verifyError(done))
+		})
+
+		it('- indirect', function (done) {
+			assert.throws(function () {
+				injector.inject(function (dummyCircular3) {
+					done('should not have been called')
+				})
+			}, verifyError(done))
+		})
+
+		it('- callback', function (done) {
+			assert.throws(function () {
+				injector.inject(function (dummyCircularAsync1) {
+					done('should not have been called')
+				})
+			}, verifyError(done))
+		})
+	})
+
 	describe('injector.prototype._getFunctionParameters', function () {
 		it('extracts the parameters from a function\'s signature', function () {
 			function f(a, b, c) {
