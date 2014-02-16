@@ -1,4 +1,4 @@
-# flame DI  [![Build Status](https://secure.travis-ci.org/kessler/flame-di.png?branch=master)](http://travis-ci.org/kessler/flame-di)
+# flame DI [![Build Status](https://secure.travis-ci.org/kessler/flame-di.png?branch=master)](http://travis-ci.org/kessler/flame-di)
 
 An experimental highly opinionated dependency injection framwork that:
 
@@ -152,7 +152,7 @@ This framework uses a lot of "dark magic" tricks that many will view as dangerou
 
 - infer that an exported function is async if the last paramter is called "callback"
 
-[back up](flame-DI)
+[back up](#flame-di-)
 
 TODO:
 
