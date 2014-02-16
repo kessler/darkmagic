@@ -1,6 +1,6 @@
-# flame DI [![Build Status](https://secure.travis-ci.org/kessler/darkmagic.png?branch=master)](http://travis-ci.org/kessler/darkmagic)
+# DarkMagic [![Build Status](https://secure.travis-ci.org/kessler/darkmagic.png?branch=master)](http://travis-ci.org/kessler/darkmagic)
 
-An experimental highly opinionated dependency injection framwork that:
+An experimental highly opinionated dependency injection framework that:
 
 * relies on code conventions
 * resolve dependencies recursively
@@ -9,7 +9,7 @@ An experimental highly opinionated dependency injection framwork that:
 
 This di relies heavily on the module system, it does not cache the dependencies you create.
 
-Please read the [dark magic section](#dark-magic---full-disclosure) before proceeding.
+Please read the [origin of the name section](#dark-magic---full-disclosure) before proceeding.
 
 ## example
 ###lib/database.js:
@@ -51,7 +51,7 @@ database(function(err, connection) {
 	}).listen(config.httpPort)
 })
 ```
-Flame DI eliminates the need for these declarations by infering the dependencies from the parameters of a function (it does that using [esprima](http://esprima.org/))
+The framework eliminates the need for these declarations by infering the dependencies from the parameters of a function (it does that using [esprima](http://esprima.org/))
 
 ## How to
 
@@ -140,8 +140,8 @@ require('darkmagic').inject(function(flameDi) {
 })
 ```
 
-## Dark magic - Full disclosure
-This framework uses a lot of "dark magic" tricks that many will view as dangerous. These people are probably right and you should listen to them!
+## Dark Magic - Full disclosure
+This framework uses a lot of "dark magic" (hence its name) tricks that many will view as dangerous. These people are probably right and you should listen to them!
 
 ####This module:
 - parses function signature and uses the parameters, literally to load modules, first attempting to require them as they are and then by attaching them to various predefined search paths in your local file system
