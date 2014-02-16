@@ -8,6 +8,7 @@ An experimental highly opinionated dependency injection framwork that:
 * promote testability
 
 This di relies heavily on the module system, it does not cache the dependencies you create.
+
 ## example
 ###lib/database.js:
 ```javascript
