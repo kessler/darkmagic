@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "eyes": "~0.1.8",
-    "mocha": "~1.17.1"
+    "mocha": "~1.17.1",
+    "find-port": "0.0.3"
   }
 }
