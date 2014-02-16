@@ -139,21 +139,22 @@ describe('Dependency Injector', function () {
 				injector.inject(function noDeps1(dummyCache) {
 					var calls = dummyCache()
 					assert.strictEqual(calls, 1)
-
-					injector.inject(function noDeps2(dummyCache) {
-						var calls = dummyCache()
-						assert.strictEqual(calls, 1)
-						done()
-					})
+					done()
 				})
 			})
 		})
 
 		it('makes subsequent require() calls return the result of the factory, rather than the exported factory function', function (done) {
-			injector.inject(function noDeps(dummyCache) {
-				var actual = require('./lib/dummyCache')
-				assert.strictEqual(actual, dummyCache)
-				done()
+			injector.inject(function noDeps1(dummyCache) {
+				var calls = dummyCache()
+				assert.strictEqual(calls, 1)
+
+				injector.inject(function noDeps2(dummyCache) {
+					var actual = require('./lib/dummyCache')
+					assert.strictEqual(actual, dummyCache)
+					assert.strictEqual(actual(), 1)
+					done()
+				})
 			})
 		})
 	})
