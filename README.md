@@ -146,7 +146,7 @@ This framework uses a lot of "dark magic" tricks that many will view as dangerou
 ####This module:
 - parses function signature and uses the parameters, literally to load modules, first attempting to require them as they are and then by attaching them to various predefined search paths in your local file system
 
-- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with it for that module
+- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with the result of the invocation for that module, see this [test](https://github.com/kessler/flame-di/blob/master/test/Injector.test.js#L127)
 
 - dashify camelCase (camel-case) paramters when trying to find non local node modules
 
