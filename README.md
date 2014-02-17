@@ -104,9 +104,7 @@ require('darkmagic').inject(function(http, server) {
 ### returning a value
 #### config.js
 ```javascript
-module.exports = function (rc) {
-	return rc('myapp', { port: 8080 })
-}
+module.exports = { port: 8080 }
 ```
 #### index.js
 ```javascript
