@@ -80,6 +80,14 @@ describe('Dependency Injector', function () {
 			})
 		})
 
+		it('does not inject capitalized functions', function () {
+			assert.doesNotThrow(function(){
+				injector.inject(function capitalized(dummyClass) {
+
+				})
+			})
+		})
+
 		// check sync and async
 		describe('a dependency via a callback if dependency is a factory and has a last parameter called "callback"', function () {
 
