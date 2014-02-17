@@ -1,4 +1,4 @@
-var debug = require('debug')('dummyCallbackSync');
+var debug = require('debug')('darkmagic_dummyCallbackSync');
 var util = require('util');
 
 // used in tests, but sadly must reside here

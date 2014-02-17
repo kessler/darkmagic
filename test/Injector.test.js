@@ -1,4 +1,4 @@
-process.env.DEBUG = 'Injector,dummy*,Dependency'
+process.env.DEBUG = 'darkmagic_*'
 
 var path = require('path')
 var Injector = require('../lib/Injector.js')
@@ -80,12 +80,22 @@ describe('Dependency Injector', function () {
 			})
 		})
 
-		it('does not inject capitalized functions', function () {
+		it('does not inject capitalized functions', function (done) {
 			assert.doesNotThrow(function(){
 				injector.inject(function capitalized(dummyClass) {
-
+					done()
 				})
 			})
+		})
+
+		it('screams when dependencies are missing', function (done) {
+
+			assert.throws(function () {
+				injector.inject(function(dummyMissing) {
+
+				})
+			}, verifyError(done, 'Missing'), '"dependency missing"')
+
 		})
 
 		// check sync and async
@@ -213,7 +223,7 @@ describe('Dependency Injector', function () {
 				injector.inject(function (dummyCircular1) {
 					done('should not have been called')
 				})
-			}, verifyError(done))
+			}, verifyError(done, 'circular'))
 		})
 
 		it('- indirect', function (done) {
@@ -221,7 +231,7 @@ describe('Dependency Injector', function () {
 				injector.inject(function (dummyCircular3) {
 					done('should not have been called')
 				})
-			}, verifyError(done))
+			}, verifyError(done, 'circular'))
 		})
 
 		it('- callback', function (done) {
@@ -229,7 +239,7 @@ describe('Dependency Injector', function () {
 				injector.inject(function (dummyCircularAsync1) {
 					done('should not have been called')
 				})
-			}, verifyError(done))
+			}, verifyError(done, 'circular'))
 		})
 	})
 
@@ -283,3 +293,17 @@ describe('Dependency Injector', function () {
 		})
 	})
 })
+
+function verifyError(done, keyword) {
+	return function(err) {
+		// this sucks but so does trying to inherit from Error
+		if (err instanceof Error && err.message && err.message.indexOf(keyword) > -1) {
+			done()
+			return true
+		} else {
+			done(err)
+			return false
+		}
+
+	}
+}

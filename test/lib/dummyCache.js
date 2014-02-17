@@ -1,4 +1,4 @@
-var debug = require('debug')('dummyCache');
+var debug = require('debug')('darkmagic_dummyCache');
 
 var calls = 0;
 

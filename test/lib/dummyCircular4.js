@@ -1,4 +1,4 @@
-var debug = require('debug')('dummyCircular4')
+var debug = require('debug')('darkmagic_dummyCircular4')
 
 // used in tests, but sadly must reside here
 module.exports = function dc1(dummyCircular5) {
