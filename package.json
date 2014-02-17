@@ -1,6 +1,6 @@
 {
   "name": "darkmagic",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "An opinionated dependency injection framework",
   "main": "index.js",
   "scripts": {
