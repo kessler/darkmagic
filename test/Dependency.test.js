@@ -6,26 +6,31 @@ var path = require('path')
 
 var libPath = path.join(__dirname, 'lib')
 
+var parent = new Dependency('parent')
+
 describe('Dependency', function () {
 
 	describe('tries to load a dependency', function () {
 		it('loads from core modules', function () {
-			var dep = new Dependency('http').load(module)
+			var dep = new Dependency('http').load(module, parent)
 			assert.strictEqual(dep, require('http'))
 		})
 
 		it('loads from node (npm) modules', function () {
-			var dep = new Dependency('eyes').load(module)
+			var dep = new Dependency('eyes').load(module, parent)
 			assert.strictEqual(dep, require('eyes'))
 		})
 
 		it('loads from fs paths', function () {
-			var dep = new Dependency('dummy').load(require.main, [ libPath ])
-			assert.strictEqual(dep, require('./lib/dummy'))
+			var dep = new Dependency('dummy')
+
+			dep.searchPaths([ libPath ])
+			var result = dep.load(require.main)
+			assert.strictEqual(result, require('./lib/dummy'))
 		})
 
 		it('modules with train-case names are specified using a camelCased version of their name (trainCase)', function () {
-			var dep = new Dependency('findPort').load(module)
+			var dep = new Dependency('findPort').load(module, parent)
 			assert.strictEqual(dep, require('find-port'))
 		})
 	})
@@ -39,5 +44,11 @@ describe('Dependency', function () {
 		it('doesnt change the string if no upper case letters are found', function () {
 			assert.strictEqual(Dependency.prototype._dashify('dbstuff'), 'dbstuff')
 		})
+	})
+
+	it('marks dependencies as optional if they end with', function () {
+		var dep = new Dependency('http_')
+		assert.ok(dep.isOptional)
+		assert.strictEqual(dep.name, 'http')
 	})
 })

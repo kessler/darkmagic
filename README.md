@@ -128,15 +128,29 @@ require('darkmagic').inject(function(fooBar, barFoo) {
 
 }, overrides)
 ```
+--------------------------------
+### listen on new dependencies
+this will not work for local files though
 
+#### index.js
+```javascript
+var injector = require('darkmagic').inject(function(smurf) {
+
+})
+
+injector.on('new dependency', function (dependency, artifact) {
+	// dependency metadata
+	// artifact is require('smurf') before injection
+})
+```
 --------------------------------
 ### getting a dash seperated npm module
 this will not work for local files though
 
 #### index.js
 ```javascript
-require('darkmagic').inject(function(flameDi) {
-	// same as require('darkmagic')
+require('darkmagic').inject(function(findPort) {
+	// same as require('find-port')
 })
 ```
 
@@ -146,7 +160,7 @@ This framework uses a lot of "dark magic" (hence its name) tricks that many will
 ####This module:
 - parses function signature and uses the parameters, literally to load modules, first attempting to require them as they are and then by attaching them to various predefined search paths in your local file system
 
-- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with the result of the invocation for that module, see this [test](https://github.com/kessler/darkmagic/blob/master/test/Injector.test.js#L127)
+- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with the result of the invocation for that module, see this [test](https://github.com/kessler/darkmagic/blob/master/test/Injector.test.js#L185) (this behavior can be turned off though)
 
 - dashify camelCase (camel-case) paramters when trying to find non local node modules
 
@@ -159,4 +173,4 @@ TODO:
 - provider class factories - parameters that start with an Upper case char will be resolved be looking for a class factory
 - static analysis of dependencies
 - implement something that will replace flame di with require()s and initializations (code generator)
-- publish to npm at some point if this takes off
+- document options and customizations

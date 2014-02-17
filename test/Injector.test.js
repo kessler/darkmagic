@@ -1,5 +1,4 @@
-process.env.DEBUG = 'darkmagic_*'
-
+var debug = require('debug')('darkmagic_Injector.test')
 var path = require('path')
 var Injector = require('../lib/Injector.js')
 var assert = require('assert')
@@ -7,14 +6,34 @@ var util = require('util')
 var Module = require('module')
 var Dependency = require('../lib/Dependency.js')
 
-describe('Dependency Injector', function () {
-	var injector
+var injector
+var toClear
 
-	before(function () {
-
-		injector = new Injector()
-		injector.addSearchPath(path.join(__dirname, 'lib'))
+function b4() {
+	toClear = []
+	injector = new Injector({ explicitRealModule: module })
+	injector.addSearchPath(path.join(__dirname, 'lib'))
+	injector.on('new dependency', function (dependency) {
+		toClear.push(dependency.requireId)
 	})
+}
+
+function after() {
+	for (var i = 0; i < toClear.length; i++) {
+		for (var x in require.cache) {
+			if (require.cache[x].id === toClear[i].requireId) {
+				delete require.cache[x]
+			}
+		}
+	}
+
+	debug('------------------ done ------------------')
+}
+
+describe('Dependency Injector', function () {
+
+	beforeEach(b4)
+	afterEach(after)
 
 	it('invokes', function (done) {
 		injector.inject(function invoking() {
@@ -23,6 +42,7 @@ describe('Dependency Injector', function () {
 	})
 
 	describe('injects', function () {
+
 		it('itself', function () {
 			injector.inject(function($injector) {
 				assert.strictEqual($injector, injector)
@@ -98,6 +118,26 @@ describe('Dependency Injector', function () {
 
 		})
 
+		it('does not auto inject external factories if told so', function (done) {
+			injector.autoInjectExternalFactories = false
+			injector.inject(function(findPort) {
+				assert.ok(findPort instanceof Function)
+				assert.strictEqual(findPort, require('find-port'))
+				done()
+			})
+		})
+
+		it('does not auto inject local factories if told so', function (done) {
+			injector.autoInjectLocalFactories = false
+
+			injector.inject(function(dummy) {
+
+				assert.ok(dummy instanceof Function)
+				assert.strictEqual(dummy, require('./lib/dummy'))
+				done()
+			})
+		})
+
 		// check sync and async
 		describe('a dependency via a callback if dependency is a factory and has a last parameter called "callback"', function () {
 
@@ -143,6 +183,7 @@ describe('Dependency Injector', function () {
 	})
 
 	describe('use the module system', function () {
+
 		it('factory invocation are only executed once, subsequent injections do not invoke the factory again', function (done) {
 			// dummy cache is a module that returns a function
 			// that function gives the test access to module internal
@@ -150,6 +191,7 @@ describe('Dependency Injector', function () {
 			// each invocation of require('dummyCache') will increament
 			// the calls counter, thus if the result cache would have
 			// broken, dummyCache() would return something higher than 1
+
 			injector.inject(function noDeps(dummyCache) {
 				var calls = dummyCache()
 				assert.strictEqual(calls, 1)
@@ -178,6 +220,7 @@ describe('Dependency Injector', function () {
 	})
 
 	describe('provides api to manually add and remove dependencies', function () {
+
 		it('remove()', function () {
 			injector.inject(function remove(dummy) {
 				var dependency = injector.getDependency('dummy')
@@ -244,6 +287,7 @@ describe('Dependency Injector', function () {
 	})
 
 	describe('injector.prototype._getFunctionParameters', function () {
+
 		it('extracts the parameters from a function\'s signature', function () {
 			function f(a, b, c) {
 			}
