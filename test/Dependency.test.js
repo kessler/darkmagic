@@ -51,4 +51,16 @@ describe('Dependency', function () {
 		assert.ok(dep.isOptional)
 		assert.strictEqual(dep.name, 'http')
 	})
+
+	it('can be customized from inside the loading module if it exports a magic interface', function () {
+		var dep = new Dependency('dummyMagicExport')
+
+		dep.searchPaths([ libPath ])
+
+		assert.ok(!dep.visited)
+
+		dep.load(module, parent)
+
+		assert.ok(dep.visited)
+	})
 })
