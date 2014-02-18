@@ -7,7 +7,7 @@ An experimental highly opinionated dependency injection framework that:
 * promote cleaner code
 * promote testability
 
-This di relies heavily on the module system, it does not cache the dependencies you create.
+This di relies heavily on the module system, it does not cache the dependencies you create [**](#**)
 
 Please read the [origin of the name section](#dark-magic---full-disclosure) before proceeding.
 
@@ -166,9 +166,21 @@ This framework uses a lot of "dark magic" (hence its name) tricks that many will
 
 [back up](#darkmagic-)
 
+####**
+if all else fails you can do
+```
+	require('darkmagic').inject(function(a, b, c), {
+		a: {},
+		b: {},
+		c: {}
+	})
+```
+these dependencies will not be cached using the module system but in the injector
+
 TODO:
 
 - provider class factories - parameters that start with an Upper case char will be resolved be looking for a class factory
 - static analysis of dependencies
 - implement something that will replace flame di with require()s and initializations (code generator)
 - document options and customizations
+- callbacks that arent getting called ... timeout ? dont let the process exit in anycase

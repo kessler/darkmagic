@@ -22,7 +22,12 @@ function newInjector(overrides) {
 
 	for (var name in overrides) {
 		var dep = new Dependency(name)
-		dep.requireId = overrides[name]
+
+		if (typeof overrides[name] === 'string')
+			dep.requireId = overrides[name]
+		else
+			dep.object = overrides[name]
+
 		injector.add(dep)
 	}
 

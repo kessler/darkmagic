@@ -63,4 +63,11 @@ describe('Dependency', function () {
 
 		assert.ok(dep.visited)
 	})
+
+	it('will load an object if it has one', function () {
+		var dep = new Dependency('object')
+		dep.object = 1
+
+		assert.strictEqual(dep.load(), 1)
+	})
 })
