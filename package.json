@@ -10,6 +10,9 @@
     "type": "git",
     "url": "https://github.com/kessler/darkmagic"
   },
+  "bin": {
+    "darkmagic": "bin/darkmagic.js"
+  },
   "keywords": [
     "dependency injection",
     "di",
