@@ -55,7 +55,7 @@ The framework eliminates the need for these declarations by infering the depende
 
 ## How to
 
-### simple dependency
+### do simple dependency
 ####simple.js:
 ```javascript
 module.exports = function (http, fs) {
@@ -71,7 +71,7 @@ require('darkmagic').inject(function(simple) {
 })
 ```
 --------------------------------
-### callbacks
+### do callbacks
 #### mooFile.js
 ```javascript
 module.exports = function (fs, callback) {
@@ -101,7 +101,7 @@ require('darkmagic').inject(function(http, server) {
 })
 ```
 --------------------------------
-### returning a value
+### return a value
 #### config.js
 ```javascript
 module.exports = { port: 8080 }
@@ -113,7 +113,7 @@ require('darkmagic').inject(function(http, config) {
 })
 ```
 --------------------------------
-### explicit dependencies
+### specify explicit dependencies
 this will not work for local files though
 
 #### index.js
@@ -127,8 +127,7 @@ require('darkmagic').inject(function(fooBar, barFoo) {
 }, overrides)
 ```
 --------------------------------
-### listen on new dependencies
-this will not work for local files though
+### listen for new dependencies
 
 #### index.js
 ```javascript
@@ -142,7 +141,7 @@ injector.on('new dependency', function (dependency, artifact) {
 })
 ```
 --------------------------------
-### getting a dash seperated npm module
+### inject a dash seperated npm module
 this will not work for local files though
 
 #### index.js
@@ -151,6 +150,17 @@ require('darkmagic').inject(function(findPort) {
 	// same as require('find-port')
 })
 ```
+### add more search paths for local modules
+```javascript
+require('darkmagic').inject(function($injector) {
+	$injector.addSearchPath('/a/path/to/somewhere') // add this path as first location to search in
+
+	$injector.inject(function(moo, pie, foo, bar) {
+
+	})
+})
+```
+
 
 ## Dark Magic - Full disclosure
 This framework uses a lot of "dark magic" (hence its name) tricks that many will view as dangerous. These people are probably right and you should listen to them!
