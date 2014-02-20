@@ -2,6 +2,8 @@
 var darkmagic = require('../index.js')
 var path = require('path')
 
+console.log('experimental feature... still not working properly')
+
 var main = process.argv[2]
 
 if (!main) {
@@ -10,3 +12,5 @@ if (!main) {
 }
 
 darkmagic.inject(require(path.resolve(process.cwd(), main)))
+
+
