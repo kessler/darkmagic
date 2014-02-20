@@ -8,7 +8,7 @@ An experimental highly opinionated dependency injection framework that:
 * promote cleaner code
 * promote testability
 
-This di relies heavily on the module system, it does not cache the dependencies you create [**](#**)
+This di relies heavily on the module system, it does not cache the dependencies you create [**](#Fine-print)
 
 Please read the [origin of the name section](#dark-magic---full-disclosure) before proceeding.
 
@@ -177,7 +177,7 @@ This framework uses a lot of "dark magic" (hence its name) tricks that many will
 
 [back up](#darkmagic-)
 
-####**
+####Fine print
 if all else fails you can do
 ```
 	require('darkmagic').inject(main, {
