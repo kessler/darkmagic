@@ -169,11 +169,15 @@ This framework uses a lot of "dark magic" (hence its name) tricks that many will
 ####**
 if all else fails you can do
 ```
-	require('darkmagic').inject(function(a, b, c), {
+	require('darkmagic').inject(main, {
 		a: {},
 		b: {},
 		c: {}
 	})
+
+	function main(a, b, c) {
+
+	}
 ```
 these dependencies will not be cached using the module system but in the injector
 
