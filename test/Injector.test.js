@@ -67,6 +67,7 @@ describe('Dependency Injector', function () {
 		})
 
 		it('dependencies from search paths', function (done) {
+			console.log(injector._searchPaths)
 			injector.inject(function searchPaths(dummy, dummy2) {
 				assert.strictEqual(dummy, 2)
 				assert.strictEqual(dummy2, 1)
