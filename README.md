@@ -3,6 +3,7 @@
 An experimental highly opinionated dependency injection framework that:
 
 * relies on code conventions
+* reduce boilerplate code
 * resolve dependencies recursively
 * promote cleaner code
 * promote testability
