@@ -8,7 +8,7 @@ An experimental highly opinionated dependency injection framework that:
 * promote cleaner code
 * promote testability
 
-This di relies heavily on the module system, it does not cache the dependencies you create [**](#Fine-print)
+This di relies heavily on the module system, it does not cache the dependencies you create [**](#fine-print)
 
 Please read the [origin of the name section](#dark-magic---full-disclosure) before proceeding.
 
