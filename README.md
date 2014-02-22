@@ -1,11 +1,11 @@
-# DarkMagic [![Build Status](https://secure.travis-ci.org/kessler/darkmagic.png?branch=master)](http://travis-ci.org/kessler/darkmagic)
+# DarkMagic [![Build Status](https://secure.travis-ci.org/kessler/darkmagic.png?branch=master)](http://travis-ci.org/kessler/darkmagic) [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
-An experimental highly opinionated dependency injection framework that:
+An experimental dependency injection framework that:
 
 * relies on code conventions
 * reduce boilerplate code
+* reduce usage of require()
 * resolve dependencies recursively
-* promote cleaner code
 * promote testability
 
 This di relies heavily on the module system, it does not cache the dependencies you create [**](#fine-print)

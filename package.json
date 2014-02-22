@@ -1,7 +1,7 @@
 {
   "name": "darkmagic",
   "version": "0.0.33",
-  "description": "An opinionated dependency injection framework",
+  "description": "A dependency injection framework ",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
