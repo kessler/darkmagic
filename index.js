@@ -16,7 +16,7 @@ function inject(file, overrides) {
 
 	injector.inject(file)
 
-	return injector;
+	return injector
 }
 
 function newInjector(overrides) {
