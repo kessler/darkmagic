@@ -1,5 +1,6 @@
 var assert = require('assert')
 var index = require('../index')
+var packageJson = require('../package.json')
 
 var injector
 var toClear
@@ -26,6 +27,11 @@ function after() {
 }
 
 describe('index', function () {
+
+	it('exposes module version to runtime', function () {
+		assert.ok(index.version, packageJson.version)
+	})
+
 	it('inject()', function (done) {
 		index.inject(function (fs) {
 			assert.strictEqual(fs, require('fs'))

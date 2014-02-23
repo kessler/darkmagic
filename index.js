@@ -1,8 +1,10 @@
 var Dependency = module.exports.Dependency = require('./lib/Dependency.js')
 var Injector = module.exports.Injector = require('./lib/Injector.js');
+var packageJson = require('./package.json')
 
 module.exports.inject = inject
 module.exports.injector = newInjector
+module.exports.version = packageJson.version
 
 function inject(file, overrides) {
 	var injector = newInjector(overrides)

@@ -10,18 +10,18 @@ var parent = new Dependency('parent')
 
 describe('Dependency', function () {
 
-	describe('tries to load a dependency', function () {
-		it('loads from core modules', function () {
+	describe('loads', function () {
+		it('from core modules', function () {
 			var dep = new Dependency('http').load(module, parent)
 			assert.strictEqual(dep, require('http'))
 		})
 
-		it('loads from node (npm) modules', function () {
+		it('from node (npm) modules', function () {
 			var dep = new Dependency('eyes').load(module, parent)
 			assert.strictEqual(dep, require('eyes'))
 		})
 
-		it('loads from fs paths', function () {
+		it('from fs paths', function () {
 			var dep = new Dependency('dummy')
 
 			dep.searchPaths([ libPath ])
@@ -32,6 +32,21 @@ describe('Dependency', function () {
 		it('modules with train-case names are specified using a camelCased version of their name (trainCase)', function () {
 			var dep = new Dependency('findPort').load(module, parent)
 			assert.strictEqual(dep, require('find-port'))
+		})
+	})
+
+	describe('throws', function () {
+		it('an error if an artifact is not found', function () {
+			assert.throws(function () {
+				new Dependency('moomoopiepie').load(module, parent)
+			})
+		})
+
+		it('nothing if an artifact is not found but is marked optional', function () {
+
+			assert.doesNotThrow(function () {
+				new Dependency('moomoopiepie_').load(module, parent)
+			})
 		})
 	})
 

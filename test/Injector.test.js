@@ -35,6 +35,7 @@ describe('Dependency Injector', function () {
 	beforeEach(b4)
 	afterEach(after)
 
+
 	it('invokes', function (done) {
 		injector.inject(function invoking() {
 			done()
@@ -117,6 +118,16 @@ describe('Dependency Injector', function () {
 				})
 			}, verifyError(done, 'Missing'), '"dependency missing"')
 
+		})
+
+		it('does not scream when dependencies are optional', function (done) {
+
+			assert.doesNotThrow(function () {
+				// optional does not exist
+				injector.inject(function(optional_) {
+					done()
+				})
+			})
 		})
 
 		it('does not auto inject external factories if told so', function (done) {
