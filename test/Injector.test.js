@@ -42,6 +42,14 @@ describe('Dependency Injector', function () {
 		})
 	})
 
+	it('enforces illegal parameter names', function () {
+		assert.throws(function () {
+			injector.inject(function illegal(toString) {
+
+			})
+		})
+	})
+
 	describe('injects', function () {
 
 		it('itself', function () {

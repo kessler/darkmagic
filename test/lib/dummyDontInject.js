@@ -1,3 +1,3 @@
-module.exports = function dontInject(msg) {
+module.exports = function dontInjectMe(msg) {
 	return 123
 }
