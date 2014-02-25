@@ -150,6 +150,16 @@ describe('Dependency Injector', function () {
 			})
 		})
 
+		it('does not inject top level exported functions that are named dontInject', function (done) {
+			injector.inject(function(dummyDontInject) {
+
+				assert.ok(dummyDontInject instanceof Function)
+				assert.strictEqual(dummyDontInject, require('./lib/dummyDontInject'))
+				assert.strictEqual(dummyDontInject(), 123)
+				done()
+			})
+		})
+
 		// check sync and async
 		describe('a dependency via a callback if dependency is a factory and has a last parameter called "callback"', function () {
 
