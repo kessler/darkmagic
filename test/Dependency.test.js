@@ -57,7 +57,7 @@ describe('Dependency', function () {
 		})
 
 		it('doesnt change the string if no upper case letters are found', function () {
-			assert.strictEqual(Dependency.prototype._dashify('dbstuff'), 'dbstuff')
+			assert.strictEqual(Dependency.prototype._dashify('dbs_tuff'), 'dbs_tuff')
 		})
 	})
 
