@@ -1,6 +1,6 @@
 # DarkMagic [![Build Status](https://secure.travis-ci.org/kessler/darkmagic.png?branch=master)](http://travis-ci.org/kessler/darkmagic) [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
-An experimental dependency injection framework that:
+An experimental dependency injection module that:
 
 * relies on code conventions
 * reduce boilerplate code
