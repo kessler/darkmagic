@@ -1,3 +1,3 @@
-module.exports = function injectMe(dummy) {
+module.exports = function () {
 	return 123
 }

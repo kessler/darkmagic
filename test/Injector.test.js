@@ -173,17 +173,17 @@ describe('Dependency Injector', function () {
 			})
 		})
 
-		it.skip('always injects top level exported functions that are named dontInject', function (done) {
-			injector.inject(function(dummyInject) {
-
-				assert.strictEqual(dummyInject, 123)
-				done()
-			})
-		})
-
-		it.skip('does not inject a function returned from a dependency', function (done) {
+		it('does not inject a function returned from a dependency', function (done) {
 			injector.inject(function (returnFunction) {
+				assert.strictEqual(typeof returnFunction, 'function')
+				assert.strictEqual(returnFunction(), 1)
 
+				injector.inject(function (returnFunction) {
+					assert.strictEqual(typeof returnFunction, 'function')
+					assert.strictEqual(returnFunction(), 1)
+
+					done()
+				})
 			})
 		})
 
@@ -233,8 +233,8 @@ describe('Dependency Injector', function () {
 
 	describe('use the module system', function () {
 
-		it.skip('cache the injector', function () {
-
+		it('cache the injector', function () {
+			assert.strictEqual(injector, require.cache['$darkMagicInjector'].exports)
 		})
 
 		it('factory invocation are only executed once, subsequent injections do not invoke the factory again', function (done) {
