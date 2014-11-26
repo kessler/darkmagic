@@ -2,12 +2,16 @@ var Dependency = module.exports.Dependency = require('./lib/Dependency.js')
 var Injector = module.exports.Injector = require('./lib/Injector.js');
 var packageJson = require('./package.json')
 
+var injector
+
+module.exports.Injector = Injector
 module.exports.inject = inject
-module.exports.injector = newInjector
 module.exports.version = packageJson.version
 
 function inject(file, overrides) {
-	var injector = newInjector(overrides)
+	if (!injector) {
+		injector = newInjector(overrides)
+	}
 
 	if (typeof file === 'string')
 		file = require(file)
@@ -30,7 +34,7 @@ function newInjector(overrides) {
 		else
 			dep.object = overrides[name]
 
-		injector.add(dep)
+		injector.addDependency(dep)
 	}
 
 	return injector

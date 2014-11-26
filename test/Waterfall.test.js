@@ -5,23 +5,22 @@ describe('Waterfall', function () {
 
 	var waterfall
 
-	before(function () {
+	beforeEach(function () {
 
 		var count = 0
 		function fnWork(callback) {
 			callback(null, ++count)
 		}
 
-		waterfall = new Waterfall([  fnWork, fnWork, fnWork ])
+		waterfall = new Waterfall([ 0, fnWork, 2, fnWork, fnWork ])
 	})
 
 
-	it('executes a series of functions', function (done) {
-
-		waterfall.run(function(err, results) {
+	it('executes functions in predefined positions in an array', function (done) {
+		waterfall.run([1, 3, 4], function(err, results) {
 			if (err) return done (err)
 
-			assert.deepEqual(results, [1, 2, 3])
+			assert.deepEqual(results, [ 0, 1, 2, 2, 3 ])
 			done()
 		})
 	})

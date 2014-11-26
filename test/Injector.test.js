@@ -6,35 +6,13 @@ var util = require('util')
 var Module = require('module')
 var Dependency = require('../lib/Dependency.js')
 
-var injector
-var toClear
-
-function b4() {
-	toClear = []
-	injector = new Injector({ explicitRealModule: module })
-	injector.addSearchPath(path.join(__dirname, 'lib'))
-	injector.on('new dependency', function (dependency) {
-		toClear.push(dependency.requireId)
-	})
-}
-
-function after() {
-	for (var i = 0; i < toClear.length; i++) {
-		for (var x in require.cache) {
-			if (require.cache[x].id === toClear[i].requireId) {
-				delete require.cache[x]
-			}
-		}
-	}
-
-	debug('------------------ done ------------------')
-}
-
 describe('Dependency Injector', function () {
+
+	var injector
+	var toClear
 
 	beforeEach(b4)
 	afterEach(after)
-
 
 	it('invokes', function (done) {
 		injector.inject(function invoking() {
@@ -46,6 +24,33 @@ describe('Dependency Injector', function () {
 		assert.throws(function () {
 			injector.inject(function illegal(toString) {
 
+			})
+		})
+	})
+
+	describe('exposes api to manually add and remove dependencies', function () {
+
+		it('removeDependency()', function () {
+			injector.inject(function remove(dummy) {
+				var dependency = injector.getDependencyByName('dummy')				
+				assert.ok(dependency instanceof Dependency)
+
+				injector.removeDependency(dependency)
+
+				assert.strictEqual(require.cache[dependency.requireId], undefined)
+				assert.strictEqual(injector.getDependencyByName('dummy'), undefined)
+			})
+		})
+
+		it('addDependency()', function () {
+
+			var dependency = new Dependency('foo')
+			dependency.requireId = 'http'
+
+			injector.addDependency(dependency)
+
+			injector.inject(function (foo) {
+				assert.strictEqual(foo, require('http'))
 			})
 		})
 	})
@@ -84,7 +89,7 @@ describe('Dependency Injector', function () {
 			})
 		})
 
-		it('dependencies from all over the place', function (done) {
+		it('dependencies from node_modules, user modules and core modules', function (done) {
 
 			injector.inject(function (http, eyes, dummy, dummyCallbackAsync) {
 				assert.strictEqual(dummy, 2)
@@ -168,11 +173,17 @@ describe('Dependency Injector', function () {
 			})
 		})
 
-		it('always injects top level exported functions that are named dontInject', function (done) {
+		it.skip('always injects top level exported functions that are named dontInject', function (done) {
 			injector.inject(function(dummyInject) {
 
 				assert.strictEqual(dummyInject, 123)
 				done()
+			})
+		})
+
+		it.skip('does not inject a function returned from a dependency', function (done) {
+			injector.inject(function (returnFunction) {
+
 			})
 		})
 
@@ -222,6 +233,10 @@ describe('Dependency Injector', function () {
 
 	describe('use the module system', function () {
 
+		it.skip('cache the injector', function () {
+
+		})
+
 		it('factory invocation are only executed once, subsequent injections do not invoke the factory again', function (done) {
 			// dummy cache is a module that returns a function
 			// that function gives the test access to module internal
@@ -231,10 +246,12 @@ describe('Dependency Injector', function () {
 			// broken, dummyCache() would return something higher than 1
 
 			injector.inject(function noDeps(dummyCache) {
-				var calls = dummyCache()
+			
+				var calls = dummyCache()				
 				assert.strictEqual(calls, 1)
 
 				injector.inject(function noDeps1(dummyCache) {
+			
 					var calls = dummyCache()
 					assert.strictEqual(calls, 1)
 					done()
@@ -253,32 +270,6 @@ describe('Dependency Injector', function () {
 					assert.strictEqual(actual(), 1)
 					done()
 				})
-			})
-		})
-	})
-
-	describe('provides api to manually add and remove dependencies', function () {
-
-		it('remove()', function () {
-			injector.inject(function remove(dummy) {
-				var dependency = injector.getDependency('dummy')
-				assert.ok(dependency instanceof Dependency)
-
-				injector.remove('dummy')
-
-				assert.strictEqual(require.cache[dependency.requireId], undefined)
-				assert.strictEqual(injector.getDependency('dummy'), undefined)
-			})
-		})
-
-		it('add()', function () {
-			var dependency = new Dependency('foo')
-			dependency.requireId = 'http'
-
-			injector.add(dependency)
-
-			injector.inject(function (foo) {
-				assert.strictEqual(foo, require('http'))
 			})
 		})
 	})
@@ -366,6 +357,30 @@ describe('Dependency Injector', function () {
 			assert.deepEqual(actual, [])
 		})
 	})
+	
+	function b4() {
+		toClear = []
+
+		injector = new Injector({ explicitRealModule: module })
+		//injector.addSearchPath(path.join(__dirname, 'lib'))
+
+		injector.on('new dependency', function (dependency, artifact) {
+			toClear.push(dependency)
+		})
+	}
+
+	function after() {
+
+		for (var i = 0; i < toClear.length; i++) {
+			injector.removeDependency(toClear[i])
+		}
+
+		injector.removeDependency(injector.getDependencyByName('$injector'))
+
+		injector = null
+
+		debug('------------------ done ------------------')
+	}
 })
 
 function verifyError(done, keyword) {
@@ -381,3 +396,4 @@ function verifyError(done, keyword) {
 
 	}
 }
+
