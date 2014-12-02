@@ -15,7 +15,8 @@ describe('Dependency Injector', function () {
 	afterEach(after)
 
 	it('invokes', function (done) {
-		injector.inject(function invoking() {
+		
+		injector.inject(function invoking() {			
 			done()
 		})
 	})
@@ -276,19 +277,19 @@ describe('Dependency Injector', function () {
 
 	describe('detects circular dependencies', function () {
 
-		function verifyError(done) {
-			return function(err) {
-				// this sucks but so does trying to inherit from Error
-				if (err instanceof Error && err.message && err.message.indexOf('circular') > -1) {
-					done()
-					return true
-				} else {
-					done(err)
-					return false
-				}
+		// function verifyError(done) {
+		// 	return function(err) {
+		// 		// this sucks but so does trying to inherit from Error
+		// 		if (err instanceof Error && err.message && err.message.indexOf('circular') > -1) {
+		// 			done()
+		// 			return true
+		// 		} else {
+		// 			done(err)
+		// 			return false
+		// 		}
 
-			}
-		}
+		// 	}
+		// }
 
 		it('- direct', function (done) {
 			assert.throws(function () {
@@ -381,7 +382,7 @@ describe('Dependency Injector', function () {
 			}
 		})
 
-		it.only('many errors', function (done) {
+		it('many errors', function (done) {
 			injector.inject(function (errorDependant1, errorDependant2) {
 
 			}, function (err) {
@@ -426,7 +427,6 @@ function verifyError(done, keyword) {
 			done(err)
 			return false
 		}
-
 	}
 }
 
