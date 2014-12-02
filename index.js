@@ -8,7 +8,13 @@ module.exports.Injector = Injector
 module.exports.inject = inject
 module.exports.version = packageJson.version
 
-function inject(file, overrides) {
+function inject(file, overrides, callback) {
+
+	if (typeof overrides === 'function') {
+		callback === overrides
+		overrides === undefined
+	}
+
 	if (!injector) {
 		injector = newInjector(overrides)
 	}
@@ -18,7 +24,7 @@ function inject(file, overrides) {
 	else if (typeof file !== 'function')
 		throw new Error('invalid parameter, must provide a filename or a function')
 
-	injector.inject(file)
+	injector.inject(file, callback)
 
 	return injector
 }
