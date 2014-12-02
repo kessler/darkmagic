@@ -362,30 +362,16 @@ describe('Dependency Injector', function () {
 		it('throws an error if no callback or event listeners are specified, when a dependency reports an error via callback', function () {
 			// its harder to test when a true async operation occur in the underlying dependency, so this one is a fake.
 			assert.throws(function () {
-				injector.inject(function (dummyCallbackAsyncError) {					
+				injector.inject(function (dummyCallbackAsyncError) {	
+					done(new Error('should not be invoked'))				
 				})					
 			})
-		})
-
-		it('emits an error event instead of throwing an error if a listener is register', function (done) {
-			injector.on('error', function (err) {
-				assert.strictEqual(err.message, 'woops')
-				done()	
-			})
-
-			try {
-				injector.inject(function (dummyCallbackAsyncError) {
-
-				})
-			} catch (e) {
-				done(new Error('should not have been thrown: ' + e))
-			}
 		})
 
 		it('invokes an error handler instead of throwing an error', function (done) {
 			try {
 				injector.inject(function (dummyCallbackAsyncError) {
-
+					done(new Error('should not be invoked'))
 				}, function (err) {
 					assert.strictEqual(err.message, 'woops')
 					done()	
@@ -393,6 +379,15 @@ describe('Dependency Injector', function () {
 			} catch (e) {
 				done(new Error('should not have been thrown: ' + e))
 			}
+		})
+
+		it.only('many errors', function (done) {
+			injector.inject(function (errorDependant1, errorDependant2) {
+
+			}, function (err) {
+				assert.ok(err instanceof Error)
+				done()
+			})
 		})
 	})
 	

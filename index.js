@@ -10,13 +10,13 @@ module.exports.version = packageJson.version
 
 function inject(file, overrides, callback) {
 
-	if (typeof overrides === 'function') {
-		callback === overrides
-		overrides === undefined
+	if (typeof overrides === 'function') {	
+		callback = overrides
+		overrides = undefined
 	}
 
 	if (!injector) {
-		injector = newInjector(overrides)
+		injector = newInjector(overrides, callback)
 	}
 
 	if (typeof file === 'string')
@@ -29,7 +29,7 @@ function inject(file, overrides, callback) {
 	return injector
 }
 
-function newInjector(overrides) {
+function newInjector(overrides, callback) {
 	var injector = new Injector()
 
 	for (var name in overrides) {
@@ -40,7 +40,12 @@ function newInjector(overrides) {
 		else
 			dep.object = overrides[name]
 
-		injector.addDependency(dep)
+		try {
+			injector.addDependency(dep)			
+		} catch (e) {
+			if (callback) return callback(e)
+			throw e
+		}
 	}
 
 	return injector

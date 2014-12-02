@@ -173,12 +173,6 @@ require('darkmagic').inject(function(foo) {
 
 })
 ```
-One might also prefer listening on error event instead, this will also prevent the error from being thrown:
-```javascript
-require('darkmagic').inject(function(foo) {
-	
-}).on('error', function(err) { /*....*/ })
-```
 
 ## Dark Magic - Full disclosure
 This framework uses a lot of "dark magic" (hence its name) tricks that many will view as dangerous. These people are probably right and you should listen to them!
