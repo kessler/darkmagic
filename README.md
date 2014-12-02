@@ -151,6 +151,7 @@ require('darkmagic').inject(function(findPort) {
 	// same as require('find-port')
 })
 ```
+--------------------------------
 ### add more search paths for local modules
 ```javascript
 require('darkmagic').inject(function($injector) {
@@ -161,7 +162,23 @@ require('darkmagic').inject(function($injector) {
 	})
 })
 ```
+--------------------------------
+### Different ways of handling errors
+By default errors that occur during the dependency resolution process are simply thrown.
+Specifying a second callback to the inject method will prevent that and the error handler will be called instead
+```javascript
+require('darkmagic').inject(function(foo) {
+	
+}, function(err) {
 
+})
+```
+One might also prefer listening on error event instead, this will also prevent the error from being thrown:
+```javascript
+require('darkmagic').inject(function(foo) {
+	
+}).on('error', function(err) { /*....*/ })
+```
 
 ## Dark Magic - Full disclosure
 This framework uses a lot of "dark magic" (hence its name) tricks that many will view as dangerous. These people are probably right and you should listen to them!
