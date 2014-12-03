@@ -234,8 +234,8 @@ describe('Dependency Injector', function () {
 
 	describe('use the module system', function () {
 
-		it('cache the injector', function () {
-			assert.strictEqual(injector, require.cache['$darkMagicInjector'].exports)
+		it('cache the injector', function () {				
+			assert.strictEqual(injector, injector._customCache['$injector'].object)
 		})
 
 		it('factory invocation are only executed once, subsequent injections do not invoke the factory again', function (done) {
@@ -276,20 +276,6 @@ describe('Dependency Injector', function () {
 	})
 
 	describe('detects circular dependencies', function () {
-
-		// function verifyError(done) {
-		// 	return function(err) {
-		// 		// this sucks but so does trying to inherit from Error
-		// 		if (err instanceof Error && err.message && err.message.indexOf('circular') > -1) {
-		// 			done()
-		// 			return true
-		// 		} else {
-		// 			done(err)
-		// 			return false
-		// 		}
-
-		// 	}
-		// }
 
 		it('- direct', function (done) {
 			assert.throws(function () {
