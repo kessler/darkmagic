@@ -29,6 +29,12 @@ describe('Dependency Injector', function () {
 		})
 	})
 
+	it('does not permit adding another injector dependency', function () {
+		assert.throws(function () {
+			injector.addDependency(new Dependency('$injector'))
+		})
+	})
+
 	describe('exposes api to manually add and remove dependencies', function () {
 
 		it('removeDependency()', function () {
