@@ -1,6 +1,8 @@
 var Dependency = module.exports.Dependency = require('./lib/Dependency.js')
 var Injector = module.exports.Injector = require('./lib/Injector.js');
 var packageJson = require('./package.json')
+var debug = require('debug')('darkmagic')
+var inspect = require('util').inspect
 
 var injector
 
@@ -8,7 +10,7 @@ module.exports.Injector = Injector
 module.exports.inject = inject
 module.exports.version = packageJson.version
 
-function inject(file, overrides, callback) {
+function inject(target, overrides, callback) {
 
 	if (typeof overrides === 'function') {	
 		callback = overrides
@@ -19,12 +21,12 @@ function inject(file, overrides, callback) {
 		injector = newInjector(overrides, callback)
 	}
 
-	if (typeof file === 'string')
-		file = require(file)
-	else if (typeof file !== 'function')
+	if (typeof target === 'string')
+		target = require(target)
+	else if (typeof target !== 'function')
 		throw new Error('invalid parameter, must provide a filename or a function')
 
-	injector.inject(file, callback)
+	injector.inject(target, callback)
 
 	return injector
 }
