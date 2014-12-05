@@ -2,13 +2,14 @@
 
 An experimental dependency injection module that:
 
+* supports "async" modules
+* promote testability
+* resolve dependencies recursively - detecting circular dependencies
 * relies on code conventions
 * reduce boilerplate code
 * reduce usage of require()
-* resolve dependencies recursively
-* promote testability
 
-This di relies heavily on the module system, it does not cache the dependencies you create [**](#fine-print)
+This di relies heavily on the module system, it does not cache the dependencies you create [**](#fine-print) as a result, one injector is use for one process. You can create more injectors but they will share the same underlying require cache.
 
 Please read the [origin of the name section](#dark-magic---full-disclosure) before proceeding.
 
@@ -53,8 +54,57 @@ database(function(err, connection) {
 })
 ```
 The framework eliminates the need for these declarations by infering the dependencies from the parameters of a function (it does that using [esprima](http://esprima.org/))
+## how does darkmagic promote testability?
+Assuming we want to test a module called _loadData_ that looks like this:
+```
+var fs = require('fs')
 
-## How to
+module.exports = function(filename, callback) {
+	fs.readFile(filename, callback)
+}
+```
+If we are writing a test that involves this module we are basically stuck with actually writing a test file to the disk. Of course there are several modules and technics out there to solve this problem. Darkmagic's take on this is described below.
+
+Here is a darkmagic version of this module:
+```
+module.exports = function (fs) {
+	return function loadData(filename, callback) {
+		fs.readFile(filename, callback)
+	}
+}
+```
+looks very similar except that now it is quite easy to inject a mock fs object that will return a result we want in our testing.
+Lets add a crypto dependency too:
+```
+module.exports = function (fs, crypto) {
+	return function loadData(filename, callback) {
+		fs.readFile(filename, function (err, data) {
+			if (err) return callback(err)
+			
+			// this is not a working example...
+			var decipher = crypto.createDecipher('aesFoo', 'shhhhhhh')
+			var result = decipher.update(data)
+			result += decipher.final()
+
+			callbackk(null, result)
+		})
+	}
+}
+```
+Now when testing this code we could do this:
+```
+var mockFs = { readFile: ... }
+var loadData = require('../lib/loadData')(mockFs, require('crypto'))
+... test code here
+```
+or we could use darkmagic again, just to replace the fs dependency with a mock:
+```
+var mockFs = { readFile: ... }
+require('darkmagic').inject(function (loadData) {
+	.. test code here
+}, { fs: mockFs })
+```
+## How to's
 
 ### do simple dependency
 ####simple.js:
@@ -72,7 +122,7 @@ require('darkmagic').inject(function(simple) {
 })
 ```
 --------------------------------
-### do callbacks
+### do callbacks (async modules)
 #### mooFile.js
 ```javascript
 module.exports = function (fs, callback) {
