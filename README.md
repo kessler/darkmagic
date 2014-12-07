@@ -9,8 +9,6 @@ An experimental dependency injection module that:
 * reduce boilerplate code
 * reduce usage of require()
 
-This di relies heavily on the module system, it does not cache the dependencies you create [**](#fine-print) as a result, one injector is use for one process. You can create more injectors but they will share the same underlying require cache.
-
 Please read the [origin of the name section](#dark-magic---full-disclosure) before proceeding.
 
 ## example
@@ -32,7 +30,7 @@ module.exports = function(rc) {
 require('darkmagic').inject(function(http, database, config) {
 	// do application stuff
 	http.createServer(function(request, response) {
-		connection.query('select * from moo', function(err, results) {
+		database.query('select * from moo', function(err, results) {
 			response.end(results)
 		})
 	}).listen(config.httpPort)
@@ -213,7 +211,7 @@ require('darkmagic').inject(function($injector) {
 })
 ```
 --------------------------------
-### Different ways of handling errors
+### Handling errors
 By default errors that occur during the dependency resolution process are simply thrown.
 Specifying a second callback to the inject method will prevent that and the error handler will be called instead
 ```javascript
@@ -230,11 +228,13 @@ This framework uses a lot of "dark magic" (hence its name) tricks that many will
 ####This module:
 - parses function signature and uses the parameters, literally to load modules, first attempting to require them as they are and then by attaching them to various predefined search paths in your local file system
 
-- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with the result of the invocation for that module, see this [test](https://github.com/kessler/darkmagic/blob/master/test/Injector.test.js#L185) (this behavior can be turned off though)
+- Attempt to inject and invoke recursively EVERY module that exports a function and override the module system cache with the result of the invocation for that module. This behavior is customizable and is turned off by default for external modules (core/node_modules)
 
-- dashify camelCase (camel-case) paramters when trying to find non local node modules
+- dashify camelCase (camel-case) parameters when trying to find non local node modules
 
 - infer that an exported function is async if the last paramter is called "callback"
+
+- relies heavily on the module system, it does not cache the dependencies you create [**](#fine-print) as a result, one injector is use for one process. You can create more injectors but they will share the same underlying require cache.
 
 [back up](#darkmagic-)
 
