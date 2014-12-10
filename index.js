@@ -18,7 +18,7 @@ function inject(target, overrides, callback) {
 	}
 
 	if (!injector) {
-		injector = newInjector(overrides, callback)
+		injector = new Injector()
 	}
 
 	if (typeof target === 'string')
@@ -26,20 +26,7 @@ function inject(target, overrides, callback) {
 	else if (typeof target !== 'function')
 		throw new Error('invalid parameter, must provide a filename or a function')
 
-	injector.inject(target, callback)
-
-	return injector
-}
-
-function newInjector(overrides, callback) {
-	var injector = new Injector()
-
-	try {
-		injector.addOverrides(overrides)
-	} catch (e) {
-		if (callback) return callback(e)
-		throw e
-	}
+	injector.inject(target, overrides, callback)
 
 	return injector
 }
