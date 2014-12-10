@@ -34,20 +34,11 @@ function inject(target, overrides, callback) {
 function newInjector(overrides, callback) {
 	var injector = new Injector()
 
-	for (var name in overrides) {
-		var dep = new Dependency(name)
-
-		if (typeof overrides[name] === 'string')
-			dep.requireId = overrides[name]
-		else
-			dep.object = overrides[name]
-
-		try {
-			injector.addDependency(dep)			
-		} catch (e) {
-			if (callback) return callback(e)
-			throw e
-		}
+	try {
+		injector.addOverrides(overrides)
+	} catch (e) {
+		if (callback) return callback(e)
+		throw e
 	}
 
 	return injector

@@ -51,7 +51,7 @@ database(function(err, connection) {
 	}).listen(config.httpPort)
 })
 ```
-The framework eliminates the need for these declarations by infering the dependencies from the parameters of a function (it does that using [esprima](http://esprima.org/))
+The framework eliminates the need for these declarations by inferring the dependencies from the parameters of a function (it does that using [esprima](http://esprima.org/))
 ## how does darkmagic promote testability?
 Assuming we want to test a module called _loadData_ that looks like this:
 ```
