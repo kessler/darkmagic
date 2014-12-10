@@ -107,7 +107,7 @@ describe('Dependency Injector', function () {
 			})
 		})
 
-		it.only('actuation', function (done) {
+		it('actuation', function (done) {
 			injector.inject(['dummyCache'])
 			injector.inject(function (dummyCache) {
 				// this means we were injected once already, which is what I want to make sure
