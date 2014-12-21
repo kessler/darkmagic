@@ -8,33 +8,31 @@ var Dependency = require('../lib/Dependency.js')
 
 describe('Dependency Injector', function () {
 
-	var injector
-	var toClear
+	var injector, depenenciesToClear
 
-	beforeEach(b4)
-	afterEach(after)
-
-	it('invokes', function (done) {
-		
-		injector.inject(function invoking() {			
-			done()
+	describe('basic operation', function () {
+		it('invokes', function (done) {
+			
+			injector.inject(function invoking() {			
+				done()
+			})
 		})
-	})
 
-	it('enforces illegal parameter names', function () {
-		assert.throws(function () {
-			injector.inject(function illegal(toString) {
+		it('enforces illegal parameter names', function () {
+			assert.throws(function () {
+				injector.inject(function illegal(toString) {
 
+				})
+			})
+		})
+
+		it('does not permit adding another injector dependency', function () {
+			assert.throws(function () {
+				injector.addDependency(new Dependency('$injector'))
 			})
 		})
 	})
-
-	it('does not permit adding another injector dependency', function () {
-		assert.throws(function () {
-			injector.addDependency(new Dependency('$injector'))
-		})
-	})
-
+	
 	describe('exposes api to manually add and remove dependencies', function () {
 
 		it('removeDependency()', function () {
@@ -62,7 +60,7 @@ describe('Dependency Injector', function () {
 		})
 	})
 
-	describe('injects', function () {
+	describe('inject()', function () {
 
 		it('itself', function () {
 			injector.inject(function($injector) {
@@ -140,17 +138,14 @@ describe('Dependency Injector', function () {
 		})
 
 		it('screams when dependencies are missing', function (done) {
-
 			assert.throws(function () {
 				injector.inject(function(dummyMissing) {
 
 				})
 			}, verifyError(done, 'Missing'), '"dependency missing"')
-
 		})
 
 		it('does not scream when dependencies are optional', function (done) {
-
 			assert.doesNotThrow(function () {
 				// optional does not exist
 				injector.inject(function(optional_) {
@@ -392,30 +387,74 @@ describe('Dependency Injector', function () {
 			})
 		})
 	})
-	
-	function b4() {
-		toClear = []
 
+	describe('overrides', function () {
+		it('any dependencies', function (done) {
+			injector.inject(function (http) {
+				assert.strictEqual(http, 1)
+				done()
+			}, {
+				http: 1
+			})
+		})
+
+		it('already injected core dependencies', function (done) {
+			injector.inject(function (http) {
+				assert.ok(http.hasOwnProperty('STATUS_CODES'))
+				assert.strictEqual(http, require('http'))
+				
+				injector.inject(function (http) {
+					assert.strictEqual(http, 2)
+					done()
+				},  { http: 2 })
+			})
+		})
+
+		it.only('already injected local dependencies', function (done) {
+			injector.inject(function (dummy) {			
+				assert.strictEqual(dummy, 2)
+				
+				injector.inject(function (dummy) {
+					assert.strictEqual(dummy, 3)
+					done()
+				},  { dummy: 3 })
+			})
+		})
+
+		it('recently overriden dependencies', function (done) {
+			injector.inject(function (http) {
+				assert.strictEqual(http, 1)
+
+				injector.inject(function (http) {
+					assert.strictEqual(http, 2)
+					done()
+				},  { http: 2 })
+			}, { http: 1})	
+		})
+	})
+	
+	before(function () {
 		injector = new Injector({ explicitRealModule: module })
-		//injector.addSearchPath(path.join(__dirname, 'lib'))
 
 		injector.on('new dependency', function (dependency, artifact) {
-			toClear.push(dependency)
+			depenenciesToClear.push(dependency)
 		})
-	}
+	})
 
-	function after() {
+	beforeEach(function () {
+		depenenciesToClear = []
+		injector.autoInjectLocalFactories = true
+		injector.autoInjectExternalFactories = false		
+	})
+	
+	afterEach(function () {
 
-		for (var i = 0; i < toClear.length; i++) {
-			injector.removeDependency(toClear[i])
+		for (var i = 0; i < depenenciesToClear.length; i++) {	
+			injector.removeDependency(depenenciesToClear[i])
 		}
 
-		injector.removeDependency(injector.getDependencyByName('$injector'))
-
-		injector = null
-
 		debug('------------------ done ------------------')
-	}
+	})	
 })
 
 function verifyError(done, keyword) {
