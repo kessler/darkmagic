@@ -4,7 +4,7 @@
   "description": "A dependency injection framework ",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha -R spec"
   },
   "repository": {
     "type": "git",

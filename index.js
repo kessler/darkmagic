@@ -21,10 +21,11 @@ function inject(target, overrides, callback) {
 		injector = new Injector()
 	}
 
-	if (typeof target === 'string')
+	if (typeof target === 'string') {
 		target = require(target)
-	else if (typeof target !== 'function')
+	} else if (typeof target !== 'function') {
 		throw new Error('invalid parameter, must provide a filename or a function')
+	}
 
 	injector.inject(target, overrides, callback)
 
