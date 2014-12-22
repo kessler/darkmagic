@@ -8,9 +8,24 @@ var Dependency = require('../lib/Dependency.js')
 
 describe('Dependency Injector', function () {
 
-	var injector, depenenciesToClear
+	var injector
 
 	describe('basic operation', function () {
+		it('clears the cache', function (done) {
+			injector.inject(function (dummy) {
+
+				injector.clearCache()
+
+				var requireCacheKeys = Object.keys(require.cache)
+				var customCacheKeys = Object.keys(injector._customCache)
+
+				assert.strictEqual(requireCacheKeys.length, 0, 'did not expected to find anything in require.cache')
+				assert.deepEqual(customCacheKeys, ['$injector'])
+
+				done()
+			})
+		})
+
 		it('invokes', function (done) {
 			
 			injector.inject(function invoking() {			
@@ -410,7 +425,7 @@ describe('Dependency Injector', function () {
 			})
 		})
 
-		it.only('already injected local dependencies', function (done) {
+		it('already injected local dependencies', function (done) {
 			injector.inject(function (dummy) {			
 				assert.strictEqual(dummy, 2)
 				
@@ -435,24 +450,16 @@ describe('Dependency Injector', function () {
 	
 	before(function () {
 		injector = new Injector({ explicitRealModule: module })
-
-		injector.on('new dependency', function (dependency, artifact) {
-			depenenciesToClear.push(dependency)
-		})
+		injector.clearCache()
 	})
 
-	beforeEach(function () {
-		depenenciesToClear = []
+	beforeEach(function () {		
 		injector.autoInjectLocalFactories = true
 		injector.autoInjectExternalFactories = false		
 	})
 	
 	afterEach(function () {
-
-		for (var i = 0; i < depenenciesToClear.length; i++) {	
-			injector.removeDependency(depenenciesToClear[i])
-		}
-
+		injector.clearCache()
 		debug('------------------ done ------------------')
 	})	
 })
