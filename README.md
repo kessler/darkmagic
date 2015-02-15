@@ -12,10 +12,10 @@ An experimental dependency injection module that:
 Please read the [origin of the name section](#dark-magic---full-disclosure) before proceeding.
 
 ## example
-###lib/database.js:
+###lib/database.js (async module):
 ```javascript
 module.exports = function (config, db, callback) {
-	// init db connection etc
+	// init db connection etc, this module will be "ready" only when the callback is invoked
 	db.connect(config.connectionString, callback)
 }
 ```
