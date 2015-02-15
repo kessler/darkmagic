@@ -267,8 +267,7 @@ describe('Dependency Injector', function () {
 			// dummy cache is a module that returns a function
 			// that function gives the test access to module internal
 			// calls counter.
-			// each invocation of require('dummyCache') will increament
-			// the calls counter, thus if the result cache would have
+			// each time dummy cache is required, the counter should increment, thus if the result cache would have
 			// broken, dummyCache() would return something higher than 1
 
 			injector.inject(function noDeps(dummyCache) {
@@ -298,6 +297,27 @@ describe('Dependency Injector', function () {
 				})
 			})
 		})
+
+		it('stores the dependency metadata next to the exports in the require cache', function (done) {
+			injector.inject(function noDeps1(dummyDontInject) {	
+				var moduleKey = path.join(__dirname, 'lib', 'dummyDontInject.js')
+				assert.strictEqual(require.cache[moduleKey].darkmagic.name, 'dummyDontInject')
+				done()
+			})
+		})
+
+		it('does not modify modules that are not injectable', function (done) {
+			var actual = require('./lib/dummyDontInject').toString()
+			var requireCacheKeys = Object.keys(require.cache)
+			var moduleKey = path.join(__dirname, 'lib', 'dummyDontInject.js')
+			
+			assert.ok(requireCacheKeys.indexOf(moduleKey) > -1)
+
+			injector.inject(function noDeps1(dummyDontInject) {
+				assert.strictEqual(require.cache[moduleKey].exports.toString(), actual)
+				done()
+			})
+		})
 	})
 
 	describe('detects circular dependencies', function () {
@@ -305,15 +325,23 @@ describe('Dependency Injector', function () {
 		it('- direct', function (done) {
 			assert.throws(function () {
 				injector.inject(function (dummyCircular1) {
-					done('should not have been called')
+					done(new Error('should not have been called'))
 				})
 			}, verifyError(done, 'circular'))
 		})
 
+		// it.only('- direct2', function (done) {
+		// 	assert.throws(function () {
+		// 		injector.inject(function (dummyCallbackAsyncMulti, dummy) {
+		// 			done(new Error('should not have been called'))
+		// 		})
+		// 	}, verifyError(done, 'circular'))
+		// })
+
 		it('- indirect', function (done) {
 			assert.throws(function () {
 				injector.inject(function (dummyCircular3) {
-					done('should not have been called')
+					done(new Error('should not have been called'))
 				})
 			}, verifyError(done, 'circular'))
 		})
@@ -321,7 +349,7 @@ describe('Dependency Injector', function () {
 		it('- callback', function (done) {
 			assert.throws(function () {
 				injector.inject(function (dummyCircularAsync1) {
-					done('should not have been called')
+					done(new Error('should not have been called'))
 				})
 			}, verifyError(done, 'circular'))
 		})
