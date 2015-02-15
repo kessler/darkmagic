@@ -1,5 +1,3 @@
-process.env.DEBUG = 'dummy*,Dependency'
-
 var Dependency = require('../lib/Dependency.js')
 var assert = require('assert')
 var path = require('path')

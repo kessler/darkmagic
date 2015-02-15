@@ -191,7 +191,6 @@ describe('Dependency Injector', function () {
 
 		it('does not inject top level exported functions that are named dontInject', function (done) {
 			injector.inject(function(dummyDontInject) {
-
 				assert.ok(dummyDontInject instanceof Function)
 				assert.strictEqual(dummyDontInject, require('./lib/dummyDontInject'))
 				assert.strictEqual(dummyDontInject(), 123)
@@ -199,7 +198,7 @@ describe('Dependency Injector', function () {
 			})
 		})
 
-		it('does not inject a function returned from a dependency', function (done) {
+		it('does not inject a function returned from a dependency', function (done) {			
 			injector.inject(function (returnFunction) {
 				assert.strictEqual(typeof returnFunction, 'function')
 				assert.strictEqual(returnFunction(), 1)
@@ -211,6 +210,25 @@ describe('Dependency Injector', function () {
 					done()
 				})
 			})
+		})
+
+		/*
+			there was a bug where a dependency d3 was required by another d1 which also required d2
+			d2 required d1 as well but d2 is asynchronous. DM would queue d3 as new dependency when resolving d1
+
+			it would also queue d3 as new when resolving d2. d3 exports a function.
+
+			d2 would resolve before d3 for d1, thus the cache now has the exported function of d3 but the d1 resolution process
+			still thinks its new so it rerequire it... 
+		*/
+		it('does not inject a function return from dependency in with an async module involved in the chain (regression)', function(done) {
+			
+			injector.inject(function zzz(rfDependant, returnFunction) {
+				assert.strictEqual(typeof returnFunction, 'function')
+				assert.strictEqual(returnFunction(), 1)
+
+				done()
+			})	
 		})
 
 		// check sync and async
@@ -310,7 +328,7 @@ describe('Dependency Injector', function () {
 			var actual = require('./lib/dummyDontInject').toString()
 			var requireCacheKeys = Object.keys(require.cache)
 			var moduleKey = path.join(__dirname, 'lib', 'dummyDontInject.js')
-			
+
 			assert.ok(requireCacheKeys.indexOf(moduleKey) > -1)
 
 			injector.inject(function noDeps1(dummyDontInject) {
