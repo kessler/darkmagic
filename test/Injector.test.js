@@ -46,7 +46,60 @@ describe('Dependency Injector', function () {
 				injector.addDependency(new Dependency('$injector'))
 			})
 		})
+
+		it('invoke a callback after injection is complete', function (done) {
+			injector.inject(function (dummyCallbackAsync) {
+
+			}, done)
+		})
+
+		it('lets the user override dependencies', function (done) {
+			injector.inject(function (http) {
+				assert.strictEqual(http, 1)
+				done()
+			}, {
+				http: 1
+			})
+		})
 	})
+
+	describe('overrides dependencies', function () {
+		
+		it('already injected core dependencies', function (done) {
+			injector.inject(function (http) {
+				assert.ok(http.hasOwnProperty('STATUS_CODES'))
+				assert.strictEqual(http, require('http'))
+				
+				injector.inject(function (http) {
+					assert.strictEqual(http, 2)
+					done()
+				},  { http: 2 })
+			})
+		})
+
+		it('already injected local dependencies', function (done) {
+			injector.inject(function (dummy) {			
+				assert.strictEqual(dummy, 2)
+				
+				injector.inject(function (dummy) {
+					assert.strictEqual(dummy, 3)
+					done()
+				},  { dummy: 3 })
+			})
+		})
+
+		it('recently overriden dependencies', function (done) {
+			injector.inject(function (http) {
+				assert.strictEqual(http, 1)
+
+				injector.inject(function (http) {
+					assert.strictEqual(http, 2)
+					done()
+				},  { http: 2 })
+			}, { http: 1})	
+		})
+	})
+
 	
 	describe('exposes api to manually add and remove dependencies', function () {
 
@@ -417,7 +470,7 @@ describe('Dependency Injector', function () {
 	})
 
 	describe('error handling', function () {
-		it('throws an error if no callback or event listeners are specified, when a dependency reports an error via callback', function () {
+		it('throws an error if no callback is provided, when a dependency reports an error via callback', function () {
 			// its harder to test when a true async operation occur in the underlying dependency, so this one is a fake.
 			assert.throws(function () {
 				injector.inject(function (dummyCallbackAsyncError) {	
@@ -426,7 +479,7 @@ describe('Dependency Injector', function () {
 			})
 		})
 
-		it('invokes an error handler instead of throwing an error', function (done) {
+		it('invokes a callback instead of throwing an error', function (done) {
 			try {
 				injector.inject(function (dummyCallbackAsyncError) {
 					done(new Error('should not be invoked'))
@@ -446,51 +499,6 @@ describe('Dependency Injector', function () {
 				assert.ok(err instanceof Error)
 				done()
 			})
-		})
-	})
-
-	describe('overrides', function () {
-		it('any dependencies', function (done) {
-			injector.inject(function (http) {
-				assert.strictEqual(http, 1)
-				done()
-			}, {
-				http: 1
-			})
-		})
-
-		it('already injected core dependencies', function (done) {
-			injector.inject(function (http) {
-				assert.ok(http.hasOwnProperty('STATUS_CODES'))
-				assert.strictEqual(http, require('http'))
-				
-				injector.inject(function (http) {
-					assert.strictEqual(http, 2)
-					done()
-				},  { http: 2 })
-			})
-		})
-
-		it('already injected local dependencies', function (done) {
-			injector.inject(function (dummy) {			
-				assert.strictEqual(dummy, 2)
-				
-				injector.inject(function (dummy) {
-					assert.strictEqual(dummy, 3)
-					done()
-				},  { dummy: 3 })
-			})
-		})
-
-		it('recently overriden dependencies', function (done) {
-			injector.inject(function (http) {
-				assert.strictEqual(http, 1)
-
-				injector.inject(function (http) {
-					assert.strictEqual(http, 2)
-					done()
-				},  { http: 2 })
-			}, { http: 1})	
 		})
 	})
 	
