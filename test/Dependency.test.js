@@ -83,4 +83,12 @@ describe('Dependency', function () {
 
 		assert.strictEqual(dep.load(), 1)
 	})
+
+	it('will throw an error if more than one dependency can be loaded with provided name', function () {
+		assert.throws(function () {
+			var dependency = new Dependency('util')
+			dependency.searchPaths.push(path.join(__dirname, 'lib'))
+			dependency.load(module, parent)
+		})
+	})
 })
