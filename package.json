@@ -27,8 +27,8 @@
     "url": "https://github.com/kessler/darkmagic/issues"
   },
   "dependencies": {
-    "esprima": "~1.0.4",
-    "debug": "~0.7.4"
+    "debug": "~0.7.4",
+    "esprima": "^2.7.0"
   },
   "devDependencies": {
     "eyes": "~0.1.8",
