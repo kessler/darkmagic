@@ -14,13 +14,20 @@ describe('Dependency Injector', function () {
 		it('clears the cache', function (done) {
 			injector.inject(function (dummy) {
 
+				var keys = Object.keys(injector._customCache)
+				console.log(keys)
 				injector.clearCache()
 
 				var requireCacheKeys = Object.keys(require.cache)
 				var customCacheKeys = Object.keys(injector._customCache)
 
-				assert.strictEqual(requireCacheKeys.length, 0, 'did not expected to find anything in require.cache')
+				for (var i = 0; i < keys.length; i++) {
+					var key = keys[i]
+					assert(requireCacheKeys.indexOf(key) === -1, 'did not expected to find ' + key + ' in require.cache')
+				}
+
 				assert.deepEqual(customCacheKeys, ['$injector'])
+				assert(require('./lib/dummy') instanceof Function, 'after cache clear, expected require(\'./lib/dummy\')  to be a function not the result')
 
 				done()
 			})
@@ -235,7 +242,6 @@ describe('Dependency Injector', function () {
 			injector.autoInjectLocalFactories = false
 
 			injector.inject(function(dummy) {
-
 				assert.ok(dummy instanceof Function)
 				assert.strictEqual(dummy, require('./lib/dummy'))
 				done()
